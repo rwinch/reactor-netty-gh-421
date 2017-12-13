@@ -8,5 +8,10 @@
 	<root level="WARN">
 		<appender-ref ref="STDOUT" />
 	</root>
+	<logger name="reactor.ipc.netty" level="trace"
+			additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
 
 </configuration>
