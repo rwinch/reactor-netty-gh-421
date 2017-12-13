@@ -1,7 +1,7 @@
 def projectProperties = [
 	[$class: 'BuildDiscarderProperty',
 		strategy: [$class: 'LogRotator', numToKeepStr: '1000']],
-	pipelineTriggers([cron('*/1 * * * *')])
+	pipelineTriggers([cron('@daily')])
 ]
 properties(projectProperties)
 
@@ -12,7 +12,7 @@ stage('Check Dependencies') {
 	node {
 		try {
 			checkout scm
-			sh "./gradlew clean check --stacktrace --no-daemon"
+			sh ""
 		} catch(Throwable t) {
 			final def RECIPIENTS = [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']]
 			def subject = "FAILING: Build ${env.JOB_NAME} ${env.BUILD_NUMBER} status is now FAILING"
