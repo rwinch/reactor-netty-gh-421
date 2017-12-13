@@ -1,7 +1,7 @@
 def projectProperties = [
 	[$class: 'BuildDiscarderProperty',
-		strategy: [$class: 'LogRotator', numToKeepStr: '500']],
-	pipelineTriggers([cron('@daily')])
+		strategy: [$class: 'LogRotator', numToKeepStr: '1000']],
+	pipelineTriggers([cron('*/1 * * * *')])
 ]
 properties(projectProperties)
 
