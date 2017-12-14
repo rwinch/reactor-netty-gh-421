@@ -44,6 +44,7 @@ public class WebfluxFormSecurityConfig {
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		http
+			.csrf().disable()
 			.authorizeExchange()
 				.pathMatchers("/login").permitAll()
 				.anyExchange().authenticated()
