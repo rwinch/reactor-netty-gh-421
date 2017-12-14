@@ -29,6 +29,7 @@ repositories {
 
 
 dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-security'
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
 	compile 'com.fasterxml.jackson.core:jackson-databind'
 	compile 'io.netty:netty-buffer'
@@ -36,6 +37,7 @@ dependencies {
 	compile 'io.projectreactor.ipc:reactor-netty:0.7.3.BUILD-SNAPSHOT'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
+	testCompile 'org.springframework.security:spring-security-test'
 	testCompile 'io.projectreactor:reactor-test'
 	testCompile 'org.skyscreamer:jsonassert'
 	testCompile 'org.springframework:spring-test'
