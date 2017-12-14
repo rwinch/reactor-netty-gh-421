@@ -56,7 +56,6 @@ public class WebfluxFormSecurityConfig {
 				.pathMatchers("/login").permitAll()
 				.anyExchange().authenticated()
 				.and()
-			.httpBasic().and()
 			.formLogin()
 				.loginPage("/login");
 		return http.build();
