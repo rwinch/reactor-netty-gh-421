@@ -23,6 +23,8 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -46,6 +48,8 @@ public class WebfluxFormSecurityConfig {
 
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+		RedirectServerAuthenticationSuccessHandler successHandler = new RedirectServerAuthenticationSuccessHandler();
+		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
 		Field field = ReflectionUtils.findField(ServerHttpSecurity.class, "headers");
 		ReflectionUtils.makeAccessible(field);
 		ReflectionUtils.setField(
@@ -57,6 +61,7 @@ public class WebfluxFormSecurityConfig {
 				.anyExchange().authenticated()
 				.and()
 			.formLogin()
+				.authenticationSuccessHandler(successHandler)
 				.loginPage("/login");
 		return http.build();
 	}
