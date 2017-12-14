@@ -23,6 +23,9 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.util.ReflectionUtils;
+
+import java.lang.reflect.Field;
 
 /**
  * @author Rob Winch
@@ -43,6 +46,10 @@ public class WebfluxFormSecurityConfig {
 
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+		Field field = ReflectionUtils.findField(ServerHttpSecurity.class, "headers");
+		ReflectionUtils.makeAccessible(field);
+		ReflectionUtils.setField(
+				field, http, null);
 		http
 			.csrf().disable()
 			.authorizeExchange()
