@@ -12,6 +12,10 @@
 			additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
+	<logger name="com.gargoylesoftware.htmlunit" level="off"
+			additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
 
 
 </configuration>
