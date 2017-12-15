@@ -50,24 +50,13 @@ class MockAuthenticationWebFilter implements WebFilter {
 
 	private ServerAuthenticationFailureHandler authenticationFailureHandler = new ServerAuthenticationEntryPointFailureHandler(new HttpBasicServerAuthenticationEntryPoint());
 
-	private ServerSecurityContextRepository securityContextRepository = NoOpServerSecurityContextRepository
-			.getInstance();
-
 	private ServerWebExchangeMatcher requiresAuthenticationMatcher = ServerWebExchangeMatchers
 			.anyExchange();
 
 	public MockAuthenticationWebFilter() {
-		setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
 		setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
 		setAuthenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"));
 		setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
-	}
-
-
-	private RedirectServerAuthenticationSuccessHandler successHandler() {
-		RedirectServerAuthenticationSuccessHandler successHandler = new RedirectServerAuthenticationSuccessHandler();
-		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
-		return successHandler;
 	}
 
 	@Override
@@ -90,21 +79,12 @@ class MockAuthenticationWebFilter implements WebFilter {
 
 	private Mono<Void> onAuthenticationSuccess(Authentication authentication, WebFilterExchange webFilterExchange) {
 		ServerWebExchange exchange = webFilterExchange.getExchange();
-		SecurityContextImpl securityContext = new SecurityContextImpl();
-		securityContext.setAuthentication(authentication);
-		return this.securityContextRepository.save(exchange, securityContext)
-			.flatMap( v -> {
+		return Mono.defer(() -> {
 				ServerHttpResponse response = exchange.getResponse();
 				response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
 				response.getHeaders().setLocation(URI.create("/"));
 				return response.setComplete();
 			});
-	}
-
-	public void setSecurityContextRepository(
-			ServerSecurityContextRepository securityContextRepository) {
-		Assert.notNull(securityContextRepository, "securityContextRepository cannot be null");
-		this.securityContextRepository = securityContextRepository;
 	}
 
 	public void setAuthenticationConverter(Function<ServerWebExchange, Mono<Authentication>> authenticationConverter) {
