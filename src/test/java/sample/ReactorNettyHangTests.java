@@ -30,7 +30,7 @@ import java.time.Duration;
  */
 public class ReactorNettyHangTests {
 
-	final int numberOfTests = 1;
+	final int numberOfTests = 1000;
 
 	@Test
 	public void deadlockWhenRedirectsToSameUrl(){
