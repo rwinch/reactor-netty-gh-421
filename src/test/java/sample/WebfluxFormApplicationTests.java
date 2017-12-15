@@ -53,8 +53,8 @@ public class WebfluxFormApplicationTests {
 
 		login
 			.loginForm()
-			.username("invalid")
-			.password("password")
+			.username("user")
+			.password("invalid")
 			.submit(LoginPage.class)
 			.assertError();
 	}
