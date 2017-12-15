@@ -62,8 +62,6 @@ public class WebfluxFormSecurityConfig {
 
 		AuthenticationWebFilter authentication = authentication();
 
-		SecurityContextServerWebExchangeWebFilter serverWebExchangeWebFilter = new SecurityContextServerWebExchangeWebFilter();
-
 		LogoutWebFilter logout = new LogoutWebFilter();
 
 		ExceptionTranslationWebFilter exception = new ExceptionTranslationWebFilter();
@@ -71,7 +69,7 @@ public class WebfluxFormSecurityConfig {
 
 		AuthorizationWebFilter authorization = authorization();
 
-		return webFilterChainProxy(reactor, authentication, serverWebExchangeWebFilter,logout, exception, authorization);
+		return webFilterChainProxy(reactor, authentication, logout, exception, authorization);
 	}
 
 	private AuthorizationWebFilter authorization() {
