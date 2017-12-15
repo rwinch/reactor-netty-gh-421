@@ -62,14 +62,12 @@ public class WebfluxFormSecurityConfig {
 
 		AuthenticationWebFilter authentication = authentication();
 
-		LogoutWebFilter logout = new LogoutWebFilter();
-
 		ExceptionTranslationWebFilter exception = new ExceptionTranslationWebFilter();
 		exception.setAuthenticationEntryPoint(new RedirectServerAuthenticationEntryPoint("/login"));
 
 		AuthorizationWebFilter authorization = authorization();
 
-		return webFilterChainProxy(reactor, authentication, logout, exception, authorization);
+		return webFilterChainProxy(reactor, authentication, exception, authorization);
 	}
 
 	private AuthorizationWebFilter authorization() {
