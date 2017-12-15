@@ -18,14 +18,7 @@ package sample;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.web.server.MatcherSecurityWebFilterChain;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.WebFilterChainProxy;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.server.WebFilter;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Rob Winch
