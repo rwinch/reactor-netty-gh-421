@@ -17,23 +17,53 @@
 package sample;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+import org.springframework.security.authorization.AuthenticatedReactiveAuthorizationManager;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.server.MatcherSecurityWebFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.ServerFormLoginAuthenticationConverter;
+import org.springframework.security.web.server.WebFilterChainProxy;
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
+import org.springframework.security.web.server.authentication.RedirectServerAuthenticationFailureHandler;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
+import org.springframework.security.web.server.authentication.logout.LogoutWebFilter;
+import org.springframework.security.web.server.authorization.AuthorizationContext;
+import org.springframework.security.web.server.authorization.AuthorizationWebFilter;
+import org.springframework.security.web.server.authorization.DelegatingReactiveAuthorizationManager;
+import org.springframework.security.web.server.authorization.ExceptionTranslationWebFilter;
+import org.springframework.security.web.server.context.ReactorContextWebFilter;
+import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcherEntry;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.server.WebFilter;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Rob Winch
  * @since 5.0
  */
-@EnableWebFluxSecurity
+@Configuration
 public class WebfluxFormSecurityConfig {
 
 	@Bean
@@ -47,22 +77,58 @@ public class WebfluxFormSecurityConfig {
 	}
 
 	@Bean
-	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+	WebFilter springSecurity(ReactiveUserDetailsService userDetailsService) {
+		ServerSecurityContextRepository securityContextRepository = new WebSessionServerSecurityContextRepository();
+		ReactorContextWebFilter reactor = new ReactorContextWebFilter(securityContextRepository);
+
+		AuthenticationWebFilter authentication = authentication(userDetailsService);
+
+		SecurityContextServerWebExchangeWebFilter serverWebExchangeWebFilter = new SecurityContextServerWebExchangeWebFilter();
+
+		LogoutWebFilter logout = new LogoutWebFilter();
+
+		ExceptionTranslationWebFilter exception = new ExceptionTranslationWebFilter();
+		exception.setAuthenticationEntryPoint(new RedirectServerAuthenticationEntryPoint("/login"));
+
+		AuthorizationWebFilter authorization = authorization();
+
+		return webFilterChainProxy(reactor, authentication, serverWebExchangeWebFilter,logout, exception, authorization);
+	}
+
+	private AuthorizationWebFilter authorization() {
+		PathPatternParserServerWebExchangeMatcher loginMatcher = new PathPatternParserServerWebExchangeMatcher("/login");
+		ReactiveAuthorizationManager permitAll = (a, e) -> Mono
+				.just(new AuthorizationDecision(true));
+		DelegatingReactiveAuthorizationManager delegateAuthz = DelegatingReactiveAuthorizationManager.builder()
+				.add(new ServerWebExchangeMatcherEntry(loginMatcher, permitAll))
+				.add(new ServerWebExchangeMatcherEntry(ServerWebExchangeMatchers.anyExchange(), AuthenticatedReactiveAuthorizationManager
+						.authenticated()))
+				.build();
+
+		return new AuthorizationWebFilter(delegateAuthz);
+	}
+
+	private AuthenticationWebFilter authentication(
+			ReactiveUserDetailsService userDetailsService) {
+		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService));
+		authentication.setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
+		authentication.setAuthenticationSuccessHandler(successHandler());
+		authentication.setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
+		authentication.setAuthenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"));
+		authentication.setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
+		return authentication;
+	}
+
+	private WebFilter webFilterChainProxy(WebFilter... filters) {
+		List<WebFilter> webFilters = Arrays.asList(filters);
+		SecurityWebFilterChain chain = new MatcherSecurityWebFilterChain(
+				ServerWebExchangeMatchers.anyExchange(), webFilters);
+		return new WebFilterChainProxy(chain);
+	}
+
+	private RedirectServerAuthenticationSuccessHandler successHandler() {
 		RedirectServerAuthenticationSuccessHandler successHandler = new RedirectServerAuthenticationSuccessHandler();
 		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
-		Field field = ReflectionUtils.findField(ServerHttpSecurity.class, "headers");
-		ReflectionUtils.makeAccessible(field);
-		ReflectionUtils.setField(
-				field, http, null);
-		http
-			.csrf().disable()
-			.authorizeExchange()
-				.pathMatchers("/login").permitAll()
-				.anyExchange().authenticated()
-				.and()
-			.formLogin()
-				.authenticationSuccessHandler(successHandler)
-				.loginPage("/login");
-		return http.build();
+		return successHandler;
 	}
 }
