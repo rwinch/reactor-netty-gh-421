@@ -30,7 +30,6 @@ public class MockUserDetailsRepositoryReactiveAuthenticationManager implements
 	public Mono<Authentication> authenticate(Authentication authentication) {
 		final String username = authentication.getName();
 		return this.repository.findByUsername(username)
-				.publishOn(Schedulers.parallel())
 				.filter( u -> this.passwordEncoder.matches((String) authentication.getCredentials(), u.getPassword()))
 				.switchIfEmpty(  Mono.error(new BadCredentialsException("Invalid Credentials")) )
 				.map( u -> new UsernamePasswordAuthenticationToken(u, u.getPassword(), u.getAuthorities()) );
