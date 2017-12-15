@@ -24,6 +24,7 @@ import org.springframework.security.web.server.authentication.WebFilterChainServ
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
+import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
@@ -65,7 +66,7 @@ class MockAuthenticationWebFilter implements WebFilter {
 
 	private RedirectServerAuthenticationSuccessHandler successHandler() {
 		RedirectServerAuthenticationSuccessHandler successHandler = new RedirectServerAuthenticationSuccessHandler();
-		//		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
+		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
 		return successHandler;
 	}
 
