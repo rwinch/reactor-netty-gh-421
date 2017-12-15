@@ -48,14 +48,13 @@ class MockAuthenticationWebFilter implements WebFilter {
 
 	private Function<ServerWebExchange, Mono<Authentication>> authenticationConverter = new ServerHttpBasicAuthenticationConverter();
 
-	private ServerAuthenticationFailureHandler authenticationFailureHandler = new ServerAuthenticationEntryPointFailureHandler(new HttpBasicServerAuthenticationEntryPoint());
+	private ServerAuthenticationFailureHandler authenticationFailureHandler = new RedirectServerAuthenticationFailureHandler("/login?error");
 
 	private ServerWebExchangeMatcher requiresAuthenticationMatcher = ServerWebExchangeMatchers
 			.anyExchange();
 
 	public MockAuthenticationWebFilter() {
 		setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
-		setAuthenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"));
 		setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
 	}
 
@@ -71,30 +70,13 @@ class MockAuthenticationWebFilter implements WebFilter {
 	private Mono<Void> authenticate(ServerWebExchange exchange,
 			WebFilterChain chain, Authentication token) {
 		WebFilterExchange webFilterExchange = new WebFilterExchange(exchange, chain);
-		return this.authenticate(token)
-				.flatMap(authentication -> onAuthenticationSuccess(authentication, webFilterExchange))
+		return this.authenticate(token).then()
 				.onErrorResume(AuthenticationException.class, e -> this.authenticationFailureHandler
 						.onAuthenticationFailure(webFilterExchange, e));
 	}
 
-	private Mono<Void> onAuthenticationSuccess(Authentication authentication, WebFilterExchange webFilterExchange) {
-		ServerWebExchange exchange = webFilterExchange.getExchange();
-		return Mono.defer(() -> {
-				ServerHttpResponse response = exchange.getResponse();
-				response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-				response.getHeaders().setLocation(URI.create("/"));
-				return response.setComplete();
-			});
-	}
-
 	public void setAuthenticationConverter(Function<ServerWebExchange, Mono<Authentication>> authenticationConverter) {
 		this.authenticationConverter = authenticationConverter;
-	}
-
-	public void setAuthenticationFailureHandler(
-			ServerAuthenticationFailureHandler authenticationFailureHandler) {
-		Assert.notNull(authenticationFailureHandler, "authenticationFailureHandler cannot be null");
-		this.authenticationFailureHandler = authenticationFailureHandler;
 	}
 
 	public void setRequiresAuthenticationMatcher(
