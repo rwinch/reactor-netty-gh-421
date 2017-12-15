@@ -18,32 +18,11 @@ package sample;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authorization.AuthenticatedReactiveAuthorizationManager;
-import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.web.server.MatcherSecurityWebFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.ServerFormLoginAuthenticationConverter;
 import org.springframework.security.web.server.WebFilterChainProxy;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationEntryPoint;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationFailureHandler;
-import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
-import org.springframework.security.web.server.authentication.logout.LogoutWebFilter;
-import org.springframework.security.web.server.authorization.AuthorizationWebFilter;
-import org.springframework.security.web.server.authorization.DelegatingReactiveAuthorizationManager;
-import org.springframework.security.web.server.authorization.ExceptionTranslationWebFilter;
-import org.springframework.security.web.server.context.ReactorContextWebFilter;
-import org.springframework.security.web.server.context.SecurityContextServerWebExchangeWebFilter;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
-import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
-import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
-import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcherEntry;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.web.server.WebFilter;
-import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,19 +36,6 @@ public class WebfluxFormSecurityConfig {
 
 	@Bean
 	WebFilter springSecurity() {
-		WebFilter authentication = authentication();
-
-		return webFilterChainProxy(authentication);
-	}
-
-	private WebFilter authentication() {
 		return new MockAuthenticationWebFilter();
-	}
-
-	private WebFilter webFilterChainProxy(WebFilter... filters) {
-		List<WebFilter> webFilters = Arrays.asList(filters);
-		SecurityWebFilterChain chain = new MatcherSecurityWebFilterChain(
-				ServerWebExchangeMatchers.anyExchange(), webFilters);
-		return new WebFilterChainProxy(chain);
 	}
 }
