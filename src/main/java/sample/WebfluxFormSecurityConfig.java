@@ -110,7 +110,7 @@ public class WebfluxFormSecurityConfig {
 
 	private AuthenticationWebFilter authentication(
 			ReactiveUserDetailsService userDetailsService) {
-		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService));
+		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new MockUserDetailsRepositoryReactiveAuthenticationManager(userDetailsService));
 		authentication.setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
 		authentication.setAuthenticationSuccessHandler(successHandler());
 		authentication.setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
