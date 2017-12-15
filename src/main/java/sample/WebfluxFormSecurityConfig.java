@@ -68,9 +68,9 @@ public class WebfluxFormSecurityConfig {
 
 	@Bean
 	public MapReactiveUserDetailsService userDetailsRepository() {
-		UserDetails user = User.withDefaultPasswordEncoder()
+		UserDetails user = User.builder()
 			.username("user")
-			.password("password")
+			.password("{noop}password")
 			.roles("USER")
 			.build();
 		return new MapReactiveUserDetailsService(user);
