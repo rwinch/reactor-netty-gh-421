@@ -57,12 +57,9 @@ public class WebfluxFormSecurityConfig {
 
 	@Bean
 	WebFilter springSecurity() {
-		ServerSecurityContextRepository securityContextRepository = new WebSessionServerSecurityContextRepository();
-		ReactorContextWebFilter reactor = new ReactorContextWebFilter(securityContextRepository);
-
 		WebFilter authentication = authentication();
 
-		return webFilterChainProxy(reactor, authentication);
+		return webFilterChainProxy(authentication);
 	}
 
 	private WebFilter authentication() {
