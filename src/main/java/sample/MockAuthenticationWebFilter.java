@@ -1,6 +1,8 @@
 package sample;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +37,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.net.URI;
 import java.util.function.Function;
 
 /**
@@ -42,8 +45,6 @@ import java.util.function.Function;
  * @since 5.0
  */
 class MockAuthenticationWebFilter implements WebFilter {
-
-	private ServerAuthenticationSuccessHandler authenticationSuccessHandler = new WebFilterChainServerAuthenticationSuccessHandler();
 
 	private Function<ServerWebExchange, Mono<Authentication>> authenticationConverter = new ServerHttpBasicAuthenticationConverter();
 
@@ -57,7 +58,6 @@ class MockAuthenticationWebFilter implements WebFilter {
 
 	public MockAuthenticationWebFilter() {
 		setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
-		setAuthenticationSuccessHandler(successHandler());
 		setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
 		setAuthenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"));
 		setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
@@ -93,19 +93,18 @@ class MockAuthenticationWebFilter implements WebFilter {
 		SecurityContextImpl securityContext = new SecurityContextImpl();
 		securityContext.setAuthentication(authentication);
 		return this.securityContextRepository.save(exchange, securityContext)
-				.then(this.authenticationSuccessHandler
-						.onAuthenticationSuccess(webFilterExchange, authentication))
-				.subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
+			.flatMap( v -> {
+				ServerHttpResponse response = exchange.getResponse();
+				response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+				response.getHeaders().setLocation(URI.create("/"));
+				return response.setComplete();
+			});
 	}
 
 	public void setSecurityContextRepository(
 			ServerSecurityContextRepository securityContextRepository) {
 		Assert.notNull(securityContextRepository, "securityContextRepository cannot be null");
 		this.securityContextRepository = securityContextRepository;
-	}
-
-	public void setAuthenticationSuccessHandler(ServerAuthenticationSuccessHandler authenticationSuccessHandler) {
-		this.authenticationSuccessHandler = authenticationSuccessHandler;
 	}
 
 	public void setAuthenticationConverter(Function<ServerWebExchange, Mono<Authentication>> authenticationConverter) {
