@@ -30,6 +30,8 @@ import java.time.Duration;
  */
 public class ReactorNettyHangTests {
 
+	final int numberOfTests = 1;
+
 	@Test
 	public void deadlockWhenRedirectsToSameUrl(){
 		redirectTests("/login");
@@ -62,7 +64,7 @@ public class ReactorNettyHangTests {
 						.poolResources(pool));
 
 		try {
-			Flux.range(1, 1000)
+			Flux.range(0, this.numberOfTests)
 					.concatMap(i -> client.post("/login", r -> r.followRedirect() )
 							.flatMap(r -> r.receive().then()))
 					.blockLast();
