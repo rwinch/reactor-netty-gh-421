@@ -60,7 +60,7 @@ public class WebfluxFormSecurityConfig {
 		ServerSecurityContextRepository securityContextRepository = new WebSessionServerSecurityContextRepository();
 		ReactorContextWebFilter reactor = new ReactorContextWebFilter(securityContextRepository);
 
-		AuthenticationWebFilter authentication = authentication();
+		WebFilter authentication = authentication();
 
 		ExceptionTranslationWebFilter exception = new ExceptionTranslationWebFilter();
 		exception.setAuthenticationEntryPoint(new RedirectServerAuthenticationEntryPoint("/login"));
@@ -83,14 +83,8 @@ public class WebfluxFormSecurityConfig {
 		return new AuthorizationWebFilter(delegateAuthz);
 	}
 
-	private AuthenticationWebFilter authentication() {
-		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new MockUserDetailsRepositoryReactiveAuthenticationManager());
-		authentication.setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
-		authentication.setAuthenticationSuccessHandler(successHandler());
-		authentication.setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
-		authentication.setAuthenticationFailureHandler(new RedirectServerAuthenticationFailureHandler("/login?error"));
-		authentication.setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
-		return authentication;
+	private WebFilter authentication() {
+		return new MockAuthenticationWebFilter();
 	}
 
 	private WebFilter webFilterChainProxy(WebFilter... filters) {
