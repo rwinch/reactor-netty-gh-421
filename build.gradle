@@ -1,44 +1,28 @@
-buildscript {
-	ext {
-		springBootVersion = '2.0.0.M7'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://repo.spring.io/snapshot" }
-		maven { url "https://repo.spring.io/milestone" }
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+plugins {
+	id "io.spring.dependency-management" version "1.0.1.RELEASE"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "io.projectreactor:reactor-bom:Bismuth-BUILD-SNAPSHOT"
 	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
-	maven { url "https://repo.spring.io/snapshot" }
-	maven { url "https://repo.spring.io/milestone" }
+	maven { url "https://repo.spring.io/libs-snapshot" }
 }
 
 
 dependencies {
-	compile 'org.springframework.boot:spring-boot-starter-webflux'
-	compile 'com.fasterxml.jackson.core:jackson-databind'
-	compile 'io.netty:netty-buffer'
-	compile 'org.thymeleaf:thymeleaf-spring5'
-	compile 'io.projectreactor.ipc:reactor-netty:0.7.3.BUILD-SNAPSHOT'
+	compile 'io.projectreactor.ipc:reactor-netty'
 
-	testCompile 'org.springframework.boot:spring-boot-starter-test'
+	testCompile 'junit:junit:4.12'
 	testCompile 'io.projectreactor:reactor-test'
-	testCompile 'org.skyscreamer:jsonassert'
-	testCompile 'org.springframework:spring-test'
-	testCompile 'org.seleniumhq.selenium:htmlunit-driver'
-	testCompile 'org.seleniumhq.selenium:selenium-support'
 }
