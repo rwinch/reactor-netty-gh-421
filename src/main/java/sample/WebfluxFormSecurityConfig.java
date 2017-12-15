@@ -70,7 +70,7 @@ public class WebfluxFormSecurityConfig {
 	public MapReactiveUserDetailsService userDetailsRepository() {
 		UserDetails user = User.builder()
 			.username("user")
-			.password("{noop}password")
+			.password("password")
 			.roles("USER")
 			.build();
 		return new MapReactiveUserDetailsService(user);
