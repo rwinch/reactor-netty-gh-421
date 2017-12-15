@@ -60,16 +60,16 @@ public class WebfluxFormApplicationTests {
 	}
 
 	@Test
-	public void login() throws Exception {
+	public void loginAndInvalidAgain() throws Exception {
 		LoginPage login = LoginPage.to(this.driver, this.port);
 		login.assertAt();
 
-		IndexPage index = login
-			.loginForm()
+		login
+				.loginForm()
 				.username("user")
-				.password("password")
-				.submit(IndexPage.class);
-		index.assertAt();
+				.password("invalid")
+				.submit(LoginPage.class)
+				.assertError();
 
 	}
 }
