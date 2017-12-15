@@ -60,7 +60,7 @@ public class WebfluxFormApplicationTests {
 	}
 
 	@Test
-	public void loginAndLogout() throws Exception {
+	public void login() throws Exception {
 		LoginPage login = IndexPage.to(this.driver, this.port, LoginPage.class);
 		login.assertAt();
 
@@ -71,9 +71,5 @@ public class WebfluxFormApplicationTests {
 				.submit(IndexPage.class);
 		index.assertAt();
 
-		login = index.logout();
-		login
-			.assertAt()
-			.assertLogout();
 	}
 }
