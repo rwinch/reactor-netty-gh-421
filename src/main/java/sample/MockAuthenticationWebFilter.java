@@ -2,6 +2,7 @@ package sample;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -46,50 +47,23 @@ import java.util.function.Function;
  */
 class MockAuthenticationWebFilter implements WebFilter {
 
-	private Function<ServerWebExchange, Mono<Authentication>> authenticationConverter = new ServerHttpBasicAuthenticationConverter();
-
-	private ServerAuthenticationFailureHandler authenticationFailureHandler = new RedirectServerAuthenticationFailureHandler("/login?error");
-
-	private ServerWebExchangeMatcher requiresAuthenticationMatcher = ServerWebExchangeMatchers
-			.anyExchange();
-
-	public MockAuthenticationWebFilter() {
-		setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
-		setRequiresAuthenticationMatcher(new PathPatternParserServerWebExchangeMatcher("/login", HttpMethod.POST));
-	}
-
 	@Override
 	public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-		return this.requiresAuthenticationMatcher.matches(exchange)
-				.filter( matchResult -> matchResult.isMatch())
-				.flatMap( matchResult -> this.authenticationConverter.apply(exchange))
-				.switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
-				.flatMap( token -> authenticate(exchange, chain, token));
+		ServerHttpRequest request = exchange.getRequest();
+		if(request.getMethod().equals(HttpMethod.POST) && "/login".equals(request.getPath().pathWithinApplication().value())) {
+			return Mono.just(exchange)
+					.publishOn(Schedulers.parallel())
+					.map(ServerWebExchange::getResponse)
+					.flatMap(this::redirect);
+		}
+		return chain.filter(exchange);
 	}
 
-	private Mono<Void> authenticate(ServerWebExchange exchange,
-			WebFilterChain chain, Authentication token) {
-		WebFilterExchange webFilterExchange = new WebFilterExchange(exchange, chain);
-		return this.authenticate(token).then()
-				.onErrorResume(AuthenticationException.class, e -> this.authenticationFailureHandler
-						.onAuthenticationFailure(webFilterExchange, e));
-	}
-
-	public void setAuthenticationConverter(Function<ServerWebExchange, Mono<Authentication>> authenticationConverter) {
-		this.authenticationConverter = authenticationConverter;
-	}
-
-	public void setRequiresAuthenticationMatcher(
-			ServerWebExchangeMatcher requiresAuthenticationMatcher) {
-		Assert.notNull(requiresAuthenticationMatcher, "requiresAuthenticationMatcher cannot be null");
-		this.requiresAuthenticationMatcher = requiresAuthenticationMatcher;
-	}
-
-	private Mono<Authentication> authenticate(Authentication authentication) {
-		return Mono.just(User.withUsername(authentication.getName()).password("password").roles("USER").build())
-				.publishOn(Schedulers.parallel())
-				.filter( u -> u.getPassword().equals(authentication.getCredentials()))
-				.switchIfEmpty(  Mono.error(new BadCredentialsException("Invalid Credentials")) )
-				.map( u -> new UsernamePasswordAuthenticationToken(u, u.getPassword(), u.getAuthorities()) );
+	private Mono<Void> redirect(ServerHttpResponse response) {
+		return Mono.defer(() -> {
+			response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+			response.getHeaders().setLocation(URI.create("/login?error"));
+			return response.setComplete();
+		});
 	}
 }
