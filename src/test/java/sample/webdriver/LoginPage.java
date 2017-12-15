@@ -40,6 +40,11 @@ public class LoginPage {
 		this.loginForm = PageFactory.initElements(webDriver, LoginForm.class);
 	}
 
+	public static <T> T to(WebDriver driver, int port) {
+		driver.get("http://localhost:" + port +"/login");
+		return (T) PageFactory.initElements(driver, LoginPage.class);
+	}
+
 	static LoginPage create(WebDriver driver) {
 		return PageFactory.initElements(driver, LoginPage.class);
 	}
