@@ -62,25 +62,7 @@ public class WebfluxFormSecurityConfig {
 
 		WebFilter authentication = authentication();
 
-		ExceptionTranslationWebFilter exception = new ExceptionTranslationWebFilter();
-		exception.setAuthenticationEntryPoint(new RedirectServerAuthenticationEntryPoint("/login"));
-
-		AuthorizationWebFilter authorization = authorization();
-
-		return webFilterChainProxy(reactor, authentication, exception, authorization);
-	}
-
-	private AuthorizationWebFilter authorization() {
-		PathPatternParserServerWebExchangeMatcher loginMatcher = new PathPatternParserServerWebExchangeMatcher("/login");
-		ReactiveAuthorizationManager permitAll = (a, e) -> Mono
-				.just(new AuthorizationDecision(true));
-		DelegatingReactiveAuthorizationManager delegateAuthz = DelegatingReactiveAuthorizationManager.builder()
-				.add(new ServerWebExchangeMatcherEntry(loginMatcher, permitAll))
-				.add(new ServerWebExchangeMatcherEntry(ServerWebExchangeMatchers.anyExchange(), AuthenticatedReactiveAuthorizationManager
-						.authenticated()))
-				.build();
-
-		return new AuthorizationWebFilter(delegateAuthz);
+		return webFilterChainProxy(reactor, authentication);
 	}
 
 	private WebFilter authentication() {
@@ -92,11 +74,5 @@ public class WebfluxFormSecurityConfig {
 		SecurityWebFilterChain chain = new MatcherSecurityWebFilterChain(
 				ServerWebExchangeMatchers.anyExchange(), webFilters);
 		return new WebFilterChainProxy(chain);
-	}
-
-	private RedirectServerAuthenticationSuccessHandler successHandler() {
-		RedirectServerAuthenticationSuccessHandler successHandler = new RedirectServerAuthenticationSuccessHandler();
-		successHandler.setRequestCache(NoOpServerRequestCache.getInstance());
-		return successHandler;
 	}
 }
