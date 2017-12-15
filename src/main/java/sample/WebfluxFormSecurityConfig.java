@@ -19,16 +19,9 @@ package sample;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthenticatedReactiveAuthorizationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.MatcherSecurityWebFilterChain;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.ServerFormLoginAuthenticationConverter;
@@ -38,7 +31,6 @@ import org.springframework.security.web.server.authentication.RedirectServerAuth
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationFailureHandler;
 import org.springframework.security.web.server.authentication.RedirectServerAuthenticationSuccessHandler;
 import org.springframework.security.web.server.authentication.logout.LogoutWebFilter;
-import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.security.web.server.authorization.AuthorizationWebFilter;
 import org.springframework.security.web.server.authorization.DelegatingReactiveAuthorizationManager;
 import org.springframework.security.web.server.authorization.ExceptionTranslationWebFilter;
@@ -48,14 +40,11 @@ import org.springframework.security.web.server.context.ServerSecurityContextRepo
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 import org.springframework.security.web.server.savedrequest.NoOpServerRequestCache;
 import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcherEntry;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.server.WebFilter;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,21 +56,11 @@ import java.util.List;
 public class WebfluxFormSecurityConfig {
 
 	@Bean
-	public MapReactiveUserDetailsService userDetailsRepository() {
-		UserDetails user = User.builder()
-			.username("user")
-			.password("password")
-			.roles("USER")
-			.build();
-		return new MapReactiveUserDetailsService(user);
-	}
-
-	@Bean
-	WebFilter springSecurity(ReactiveUserDetailsService userDetailsService) {
+	WebFilter springSecurity() {
 		ServerSecurityContextRepository securityContextRepository = new WebSessionServerSecurityContextRepository();
 		ReactorContextWebFilter reactor = new ReactorContextWebFilter(securityContextRepository);
 
-		AuthenticationWebFilter authentication = authentication(userDetailsService);
+		AuthenticationWebFilter authentication = authentication();
 
 		SecurityContextServerWebExchangeWebFilter serverWebExchangeWebFilter = new SecurityContextServerWebExchangeWebFilter();
 
@@ -108,9 +87,8 @@ public class WebfluxFormSecurityConfig {
 		return new AuthorizationWebFilter(delegateAuthz);
 	}
 
-	private AuthenticationWebFilter authentication(
-			ReactiveUserDetailsService userDetailsService) {
-		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new MockUserDetailsRepositoryReactiveAuthenticationManager(userDetailsService));
+	private AuthenticationWebFilter authentication() {
+		AuthenticationWebFilter authentication = new AuthenticationWebFilter(new MockUserDetailsRepositoryReactiveAuthenticationManager());
 		authentication.setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
 		authentication.setAuthenticationSuccessHandler(successHandler());
 		authentication.setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
