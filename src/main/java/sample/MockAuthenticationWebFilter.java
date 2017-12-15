@@ -32,6 +32,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.function.Function;
 
@@ -40,8 +41,6 @@ import java.util.function.Function;
  * @since 5.0
  */
 class MockAuthenticationWebFilter implements WebFilter {
-
-	private final ReactiveAuthenticationManager authenticationManager;
 
 	private ServerAuthenticationSuccessHandler authenticationSuccessHandler = new WebFilterChainServerAuthenticationSuccessHandler();
 
@@ -56,7 +55,6 @@ class MockAuthenticationWebFilter implements WebFilter {
 			.anyExchange();
 
 	public MockAuthenticationWebFilter() {
-		this.authenticationManager = new MockUserDetailsRepositoryReactiveAuthenticationManager();
 		setSecurityContextRepository(new WebSessionServerSecurityContextRepository());
 		setAuthenticationSuccessHandler(successHandler());
 		setAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
@@ -83,7 +81,7 @@ class MockAuthenticationWebFilter implements WebFilter {
 	private Mono<Void> authenticate(ServerWebExchange exchange,
 			WebFilterChain chain, Authentication token) {
 		WebFilterExchange webFilterExchange = new WebFilterExchange(exchange, chain);
-		return this.authenticationManager.authenticate(token)
+		return this.authenticate(token)
 				.flatMap(authentication -> onAuthenticationSuccess(authentication, webFilterExchange))
 				.onErrorResume(AuthenticationException.class, e -> this.authenticationFailureHandler
 						.onAuthenticationFailure(webFilterExchange, e));
@@ -123,5 +121,13 @@ class MockAuthenticationWebFilter implements WebFilter {
 			ServerWebExchangeMatcher requiresAuthenticationMatcher) {
 		Assert.notNull(requiresAuthenticationMatcher, "requiresAuthenticationMatcher cannot be null");
 		this.requiresAuthenticationMatcher = requiresAuthenticationMatcher;
+	}
+
+	private Mono<Authentication> authenticate(Authentication authentication) {
+		return Mono.just(User.withUsername(authentication.getName()).password("password").roles("USER").build())
+				.publishOn(Schedulers.parallel())
+				.filter( u -> u.getPassword().equals(authentication.getCredentials()))
+				.switchIfEmpty(  Mono.error(new BadCredentialsException("Invalid Credentials")) )
+				.map( u -> new UsernamePasswordAuthenticationToken(u, u.getPassword(), u.getAuthorities()) );
 	}
 }
