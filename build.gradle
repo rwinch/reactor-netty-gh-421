@@ -32,7 +32,6 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
 	compile 'com.fasterxml.jackson.core:jackson-databind'
 	compile 'io.netty:netty-buffer'
-	compile 'org.thymeleaf:thymeleaf-spring5'
 	compile 'io.projectreactor.ipc:reactor-netty:0.7.3.BUILD-SNAPSHOT'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
