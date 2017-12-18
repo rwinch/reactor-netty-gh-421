@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Monitor usage statistics</title>
+    <STYLE type="text/css">
+      body{
+        margin-top: 20px;
+        margin-left: 50px;
+        margin-right: 50px;
+        background: white;
+      }
+
+      table{
+        border: 0px;
+        border-spacing: 0px;
+      }
+
+      td{
+        padding-left: 3px;
+        padding-right: 3px;
+        white-space: nowrap;
+      }
+
+      td div {
+        vertical-align:middle;
+        display:inline-block;
+      }
+
+      td.header{
+        white-space:normal;
+        vertical-align:middle;
+      }
+
+      .header{
+        text-align: center;
+        padding-top: 3px;
+        padding-left: 10px;
+        padding-bottom: 3px;
+        padding-right: 10px;
+        font-weight: bold;
+        background-color: #DDDDDD;
+      }
+
+      /*value*/
+      .va{
+        text-align: right;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      /*percents*/
+      .pc{
+        font-size: 80%;
+        color: gray;
+        text-align: right;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .footer{
+        font-size: 80%;
+        text-align: right;
+        padding-top: 20px;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #F2F2F2;
+      }
+
+      .a::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAQUlEQVR42mNgIAGsWTHzP8OQBKMuH+Iub2ho+E8IU2Q4JfKkGv5/yBn+HwsGy8MiGRc9vIOFNqmFZul8FIwC+gEATBJwOIsN9zUAAAAASUVORK5CYII=) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.b::before{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAARUlEQVR42mNgIAGsWTHzP8OQBKMuH+Iub2ho+E8IU2Q4PpdT1XAgGHqG/8eCwfKwoMJFD+9goU1qoVk6Hy1bRl1OP5cDAJHJgcDFQNGSAAAAAElFTkSuQmCC) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.c::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAARElEQVR42mNgIAGsWTHzP8OQBKMuH+Iub2ho+E8IU2Q4JfKDx/C/f//+p4Xh/7FgsDwsknHRIyDMqW44zdL5KBgF9AMAqWVwMtveiQsAAAAASUVORK5CYII=) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.d::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAR0lEQVR42mNgIAGsWTHzP8OQBKMuH+Iub2ho+E8IU2Q4JfKDx/C/f//+p4Xh/7FgsDwsknHRIyDMqW44zdL5aNky6nL6uRwAhLp74n/JthwAAAAASUVORK5CYII=) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.e::before{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAJklEQVR42mNgIAGsWTHzP8OQBKMuH3X5qMupaAGx9CgYBaNgRAIAGqAjEYNm/+IAAAAASUVORK5CYII=) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.f::before{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAKUlEQVR42mNgIAGsWTHzP8OQBKMuH3X5qMupaAGx9GiYj7p81OUj0uUAISs0mbz7JaEAAAAASUVORK5CYII=) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.g::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAJ0lEQVR42mNgIAGsWTHzP8OQBKMuH3X5qMtHXT7q8lGXj7qcPi4HAIbFIxFqImLEAAAAAElFTkSuQmCC) repeat;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.h::before{
+  display: block;
+  float: left;
+  width: 23px;
+  height: 23px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.i::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAALUlEQVR42mNgQAJbtmxxAeL/W7du9WHABmAKoPg9hkI0BZgKcShAVYhHARwDAE6NYKBDMv2oAAAAAElFTkSuQmCC) repeat;
+  width: 9px;
+  height: 5px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.j::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAFCAYAAACXU8ZrAAAAK0lEQVR42mPYsmXLf0KYAUi44FHwfuvWrT4MIIBDIUIBDKApxFSArhBdAQB+KmCg6NF14QAAAABJRU5ErkJggg==) repeat;
+  width: 9px;
+  height: 5px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.k{
+  color:#808080;
+}
+.l::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABzklEQVR42rWS304TURDGv3cwJCa+Ahc8A5dGkzZaSgt4AUpihEgwJa1IAwWK8ca/JCYWkl7UWJACWgVewRfQBGIavTBtaWnLafe0VccZ22O7cfVKTzLZ7G7md77vmwH+11n0Qa0MQ0s9HENOvgXO4+xfm8KX8YEbGrfd6L07Av3tDYjegh5dRSnogi9xC/UFL947Ns9x89EaqLYDenwN1vokil/ToO8MeDIOlQ6jRgegykuQI4RvbJymQNVtkMWQ+itQ4zXIQGiPa5+LIU+vQ4fcOGMDBFzoWx2HpVItFdZuC9JkiFgxkMQ0qsGL6Lc1s6SPz25ASYkKxSqyz39aUUs+6PwLVtKGxG9Cxaeg5rtt3LmESnEDVGJ/lS2QQDh5Zf5Hh5BppjsQCTbsQd4GKDDgZLMDiXihfwGGkTN2JBOxZAPwy+EDvlFKIGWGfIqDWH4m6kdW1Ol2JjIRqUU/3tlykDknZ1ArtpWUu+zIZEywMmLZE1vz7AWci02gLmEVkiAniARrQAL5bYxi4ygGEgjDquxbG5BYkxEL6EsCND+Az86rzBBeWy1zXmaAUXN/FEr2hL1bf2w2J+RBjzzvXUEhMggttTyE4+5///T8AKAlVv/V791BAAAAAElFTkSuQmCC) repeat;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.m::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABV0lEQVR42q3TvUrDUBQH8IAgiCAK4gu4+AY+hos6OTq6ZHFN3NJ8lAyKiuBkX0ArusTPmEGbIioi9aM1VCi0gkXRmjT5e8LFaCmNQXrhDIFzf/fck3M5rhtLFMUBVVXX0un0o67rTlxQjqNpWkYQhJEISKVSommaHhIu27YDOnA1AhRFufG89v0BRfWzHQiCAAQ8RAB9FH4n1MmaPQf6twFuExjaARaLrQhdpTMwcQr0bAFTOWClBIwfM+iglgC4qLPkybOf5KcPYO4SOHlOAGyUGbBcim9kR2CpyIBM+Z+AUWVA2MTvVWkAM3ngMEkPXB8Y2wOGd4F1B7h9A6ZzDN2vJfwL+Rdg1GCbwujNAvxVzBVokK5d121JeG8CR9T1bAV49doHicb5LgIkSZo3DKPh+/6fYxzmWJbVlGVZjwCe5/sIWaCyCmFpcUEn31PFCj3Awa685C8BPJPtwf/u+gAAAABJRU5ErkJggg==) repeat;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.n::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB6ElEQVR42mNgoBVokuf60qbI+6NNiffHBA3hVyCxUlEGCbyaaqRZbwA1/CoRZ9BpV+L78T/B+f//ROf/EzVEPpSKM0QuM5H7WS/DcR2n5geB5v9/xzr8n6wl+n2evvS7//FO/0GGTNES/bLNRvXb/ySX/9+i7P5jNaRdme/XjxiH/7+A+E+s4/9/cY7/wQZADQG5BGQACM/QkfhRKc0gjGIA0H8GU7XEvv8EGgByxd84JEMSEIYsNZb7CvSiE4rmelmOe7P1pL7M0Zf6AnPFu3Dr/5M1Rb8AA/PH+3AbuCELDWW+LALiehl2hDeqpFg+fQb67WuU/f/v0fb/QYYAA+4LTL5VkfcBuktqpdlfoxjwKdLu/xeQIdEQQ+rlOH/A5FsUeV6hh0kNsgHV0my3JwBtBGGQId+ABjwLtvzfrMD9oEWB5+WnSFt4mIBiZIqW2JcmBa5TqIEIjOfV5orfQF6BGQLzzi9owIJiBxTFoHSCorlQmEF6rr70zw9Am0BewWYIKHZ+xYIMcgQF7neMaAR5A5SQQIYADfvaqsjzA2YQMCl/maot9h1k0Jsw6/91suyPsaZGkCETNUV/gOIZGHA/YK7pVxf+AkonQL9/x6kZBiolGERBdKeKwFtQTDQCMdCwN8hyVAUA4KpEMPsOg2AAAAAASUVORK5CYII=) repeat;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.o::after{
+  display: block;
+  float: left;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB30lEQVR42mNgoBUQaxL+ItUm+gOEVSZIvQILlnJL4NXEVyN4Q7pN9BdDCY+OdLvYj6z/zv+zgVh1otQHhlK+SJNlSj+F6oWuY9XMC9Qc8cDif/pvh/9qk6W/682Tf5f53+k/yBD1KdJf7LZpfMv57/I/+Zvdf6yGyLSL/Ur74fA/7ZfD//Q/jv8z/jn+hxgAMQTkEpABuUCsNUP2B0MlrzCqCaXcBhpTZb6n/XQAuyLjL3ZDTJYqfQV60QlFr0i90D3d2XJf9ObIf0mFuiL+nQ3IK1/EmkR+JLy3gRtiuFDxi+EixS+CyN7grhL4lPzZ7n/KV/v/qd/t/4O8Agy4LzB5yVaRB+gu4asVfI1qwCegAV8QhojUC/+AG9Ai+grmHVjAAmMMYQB/teBtYFx/AWGQIanf7P/HPLP8L94s8kCiReRl0idbeJiAYgSERZuET6EFIl+k5WrVb2CvgFzyDeEdcMz8hsQOKIpB6QRVcyGntP5c+Z9JH2z/g7yC1RBQ7IANghqCHo18QG9EAhMSyBCgYV8lW0V/wAwCeQ0cxUCD4t9Y/xesE3qMPSkDDVGbKP0DFM/AgPsBc41Sv+QXcDqZIvMdp2Y4qOQRBVFyneJvQTEh0ij8A2jYG2Q5qgIAcitG+rl1MTIAAAAASUVORK5CYII=) repeat;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  content: '';
+  font-size: '0';
+}
+.w0::before, .v0::after{
+  width: 46px;
+}
+.w1::before, .v1::after{
+  width: 69px;
+}
+.w2::before, .v2::after{
+  width: 92px;
+}
+.w3::before, .v3::after{
+  width: 115px;
+}
+.w4::before, .v4::after{
+  width: 138px;
+}
+.w5::before, .v5::after{
+  width: 161px;
+}
+.w6::before, .v6::after{
+  width: 184px;
+}
+.w7::before, .v7::after{
+  width: 207px;
+}
+.w8::before, .v8::after{
+  width: 230px;
+}
+.w9::before, .v9::after{
+  width: 253px;
+}
+.w10::before, .v10::after{
+  width: 276px;
+}
+.w11::before, .v11::after{
+  width: 299px;
+}
+.w12::before, .v12::after{
+  width: 322px;
+}
+.w13::before, .v13::after{
+  width: 345px;
+}
+.w14::before, .v14::after{
+  width: 368px;
+}
+.w15::before, .v15::after{
+  width: 391px;
+}
+.w16::before, .v16::after{
+  width: 414px;
+}
+.w17::before, .v17::after{
+  width: 437px;
+}
+.w18::before, .v18::after{
+  width: 460px;
+}
+.w19::before, .v19::after{
+  width: 483px;
+}
+.w20::before, .v20::after{
+  width: 506px;
+}
+.w21::before, .v21::after{
+  width: 529px;
+}
+.w22::before, .v22::after{
+  width: 552px;
+}
+.w23::before, .v23::after{
+  width: 575px;
+}
+.w24::before, .v24::after{
+  width: 598px;
+}
+.w25::before, .v25::after{
+  width: 621px;
+}
+.w26::before, .v26::after{
+  width: 644px;
+}
+.w27::before, .v27::after{
+  width: 667px;
+}
+.w28::before, .v28::after{
+  width: 690px;
+}
+.w29::before, .v29::after{
+  width: 713px;
+}
+.w30::before, .v30::after{
+  width: 736px;
+}
+.w31::before, .v31::after{
+  width: 759px;
+}
+
+    </STYLE>
+    <script type="text/javascript">
+      var tooltips = {
+        "l":"Waiting thread",
+"m":"Class",
+"n":"Blocked thread",
+"o":"Blocker thread",
+
+        null: null
+      };
+      window.onmouseover = function(e) {
+        var tooltip = tooltips[e.target.className];
+        if (tooltip != null) {
+          e.target.setAttribute('title', tooltip);
+        }
+      };
+    </script>
+ </head>
+  <body>
+  <div><h2>Monitor usage statistics</h2></div>
+    <table width="100%">
+<tr><td class="header" width="100%"> Name </td><td class="header" colspan="2"><div class="j"></div> Time (ms) </td><td class="header" colspan="2"> Count </td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>YJPAgent-Telemetry</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23233</div></td><td class="va">807,868</td><td class="pc">99 %</td><td class="va">808</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">807,868</td><td class="pc">99 %</td><td class="va">808</td><td class="pc">1 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">192,652</td><td class="pc">24 %</td><td class="va">23,021</td><td class="pc">30 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-4</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23350</div></td><td class="va">189,069</td><td class="pc">23 %</td><td class="va">20,120</td><td class="pc">26 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">170,531</td><td class="pc">21 %</td><td class="va">18,717</td><td class="pc">25 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">18,538</td><td class="pc">2 %</td><td class="va">1,399</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">4</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">2,306</td><td class="pc">0 %</td><td class="va">149</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2,304</td><td class="pc">0 %</td><td class="va">123</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">26</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">1,169</td><td class="pc">0 %</td><td class="va">1,596</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">1,146</td><td class="pc">0 %</td><td class="va">1,478</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">23</td><td class="pc">0 %</td><td class="va">116</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">2</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">85</td><td class="pc">0 %</td><td class="va">655</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">71</td><td class="pc">0 %</td><td class="va">567</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">88</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">21</td><td class="pc">0 %</td><td class="va">500</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">402</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">8</td><td class="pc">0 %</td><td class="va">98</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-1</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23347</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-4</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23350</div></td><td class="va">91,420</td><td class="pc">11 %</td><td class="va">18,769</td><td class="pc">25 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">91,416</td><td class="pc">11 %</td><td class="va">18,650</td><td class="pc">24 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">85,471</td><td class="pc">11 %</td><td class="va">17,732</td><td class="pc">23 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">5,944</td><td class="pc">1 %</td><td class="va">916</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">2</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">106</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">82</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">24</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">7</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">3</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">4</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">5</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">5</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-1</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23347</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>Reference Handler</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'system'</div> <div class="k">Native ID: 23230</div></td><td class="va">69,370</td><td class="pc">9 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.ref.Reference$Lock</div></td><td class="va">69,370</td><td class="pc">9 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>Finalizer</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'system'</div> <div class="k">Native ID: 23231</div></td><td class="va">69,368</td><td class="pc">9 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.ref.ReferenceQueue$Lock</div></td><td class="va">69,368</td><td class="pc">9 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">8,387</td><td class="pc">1 %</td><td class="va">2,736</td><td class="pc">4 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">5,821</td><td class="pc">1 %</td><td class="va">372</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">5,819</td><td class="pc">1 %</td><td class="va">322</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">50</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">2,260</td><td class="pc">0 %</td><td class="va">474</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2,258</td><td class="pc">0 %</td><td class="va">395</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">58</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">21</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">260</td><td class="pc">0 %</td><td class="va">1,422</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">247</td><td class="pc">0 %</td><td class="va">1,383</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">39</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">42</td><td class="pc">0 %</td><td class="va">388</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">38</td><td class="pc">0 %</td><td class="va">341</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">4</td><td class="pc">0 %</td><td class="va">46</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-4</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23350</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">80</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">73</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">7</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">3,344</td><td class="pc">0 %</td><td class="va">3,648</td><td class="pc">5 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">2,029</td><td class="pc">0 %</td><td class="va">553</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2,026</td><td class="pc">0 %</td><td class="va">530</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">22</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">1,135</td><td class="pc">0 %</td><td class="va">1,659</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">1,102</td><td class="pc">0 %</td><td class="va">1,253</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">32</td><td class="pc">0 %</td><td class="va">387</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">19</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">179</td><td class="pc">0 %</td><td class="va">1,436</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">165</td><td class="pc">0 %</td><td class="va">1,339</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">97</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">2,420</td><td class="pc">0 %</td><td class="va">7,557</td><td class="pc">10 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2,415</td><td class="pc">0 %</td><td class="va">7,211</td><td class="pc">9 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">4</td><td class="pc">0 %</td><td class="va">320</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">26</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-4</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23350</div></td><td class="va">2,284</td><td class="pc">0 %</td><td class="va">6,025</td><td class="pc">8 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">2,281</td><td class="pc">0 %</td><td class="va">5,771</td><td class="pc">8 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">3</td><td class="pc">0 %</td><td class="va">242</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">1,407</td><td class="pc">0 %</td><td class="va">4,222</td><td class="pc">6 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">1,111</td><td class="pc">0 %</td><td class="va">1,786</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">1,094</td><td class="pc">0 %</td><td class="va">1,669</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">16</td><td class="pc">0 %</td><td class="va">111</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">6</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">199</td><td class="pc">0 %</td><td class="va">1,861</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">144</td><td class="pc">0 %</td><td class="va">1,503</td><td class="pc">2 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">54</td><td class="pc">0 %</td><td class="va">358</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">96</td><td class="pc">0 %</td><td class="va">573</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">76</td><td class="pc">0 %</td><td class="va">462</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">19</td><td class="pc">0 %</td><td class="va">111</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">2</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">2</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-1</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23347</div></td><td class="va">94</td><td class="pc">0 %</td><td class="va">2,260</td><td class="pc">3 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">94</td><td class="pc">0 %</td><td class="va">2,258</td><td class="pc">3 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">94</td><td class="pc">0 %</td><td class="va">2,257</td><td class="pc">3 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>io.netty.util.concurrent.DefaultPromise</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">35</td><td class="pc">0 %</td><td class="va">1,003</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">33</td><td class="pc">0 %</td><td class="va">928</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">55</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">20</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">29</td><td class="pc">0 %</td><td class="va">546</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">318</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">12</td><td class="pc">0 %</td><td class="va">307</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">11</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">10</td><td class="pc">0 %</td><td class="va">107</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">10</td><td class="pc">0 %</td><td class="va">107</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">4</td><td class="pc">0 %</td><td class="va">95</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">3</td><td class="pc">0 %</td><td class="va">81</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">11</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">3</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="d"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-6</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23352</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">25</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g v0"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">25</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-4</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23350</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">1</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-2</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23348</div></td><td class="va">26</td><td class="pc">0 %</td><td class="va">981</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">23</td><td class="pc">0 %</td><td class="va">884</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">85</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">12</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-1</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23347</div></td><td class="va">17</td><td class="pc">0 %</td><td class="va">3,396</td><td class="pc">4 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">17</td><td class="pc">0 %</td><td class="va">3,396</td><td class="pc">4 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-7</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23353</div></td><td class="va">14</td><td class="pc">0 %</td><td class="va">686</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">13</td><td class="pc">0 %</td><td class="va">578</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">40</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">68</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-8</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23354</div></td><td class="va">4</td><td class="pc">0 %</td><td class="va">492</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">2</td><td class="pc">0 %</td><td class="va">387</td><td class="pc">1 %</td></tr>
+<tr><td><div class="g"></div><div class="f"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.io.PrintStream</div></td><td class="va">1</td><td class="pc">0 %</td><td class="va">100</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>reactor.util.Loggers$ConsoleLogger</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">5</td><td class="pc">0 %</td></tr>
+<tr><td><div class="d"></div><div class="k">Blocked thread</div> <div class="n"></div> <div>reactor-http-nio-5</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23351</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">6</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="c"></div><div class="k">was blocked by thread</div> <div class="o"></div> <div>reactor-http-nio-3</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23349</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">6</td><td class="pc">0 %</td></tr>
+<tr><td><div class="g"></div><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">6</td><td class="pc">0 %</td></tr>
+<tr><td><div class="c"></div><div class="k">Waiting thread</div> <div class="l"></div> <div>reactor-http-nio-5</div> <div class="k">[DAEMON]</div> <div class="k">Group: 'main'</div> <div class="k">Native ID: 23351</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">13</td><td class="pc">0 %</td></tr>
+<tr><td><div class="h"></div><div class="e"></div><div class="k">on monitor of class</div> <div class="m"></div> <div>java.lang.Object</div></td><td class="va">0</td><td class="pc">0 %</td><td class="va">13</td><td class="pc">0 %</td></tr>
+</table>
+
+  <div class="footer">Generated by <a href="https://www.yourkit.com">YourKit Java Profiler 2017.02-b63</a> &nbsp;&nbsp;&nbsp;December 18, 2017 10:55:36 AM</div>
+  </body>
+</html>

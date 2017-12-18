@@ -1,0 +1,369 @@
+2017-12-18 10:47:08
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (25.141-b15 mixed mode):
+
+"Attach Listener" #29 daemon prio=9 os_prio=0 tid=0x00007f0e0405b800 nid=0x5dd7 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"threadDeathWatcher-2-1" #28 daemon prio=1 os_prio=0 tid=0x00007f0db8153800 nid=0x5b3e waiting on condition [0x00007f0e38738000]
+   java.lang.Thread.State: TIMED_WAITING (sleeping)
+	at java.lang.Thread.$$YJP$$sleep(Native Method)
+	at java.lang.Thread.sleep(Thread.java)
+	at io.netty.util.ThreadDeathWatcher$Watcher.run(ThreadDeathWatcher.java:159)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-8" #27 daemon prio=5 os_prio=0 tid=0x00007f0e626a6800 nid=0x5b3a runnable [0x00007f0e392bd000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cb80da38> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cb80da50> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cb80d9f0> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-7" #26 daemon prio=5 os_prio=0 tid=0x00007f0e626a6000 nid=0x5b39 runnable [0x00007f0e393be000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cbac3960> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cbac4a38> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cbac38b8> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-6" #25 daemon prio=5 os_prio=0 tid=0x00007f0e626a5000 nid=0x5b38 runnable [0x00007f0e394bf000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cb8cba00> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cb8cce08> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cb8cca28> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-5" #24 daemon prio=5 os_prio=0 tid=0x00007f0e62714000 nid=0x5b37 runnable [0x00007f0e395c0000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cb8c4878> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cb8c5998> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cb8c58a0> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-4" #23 daemon prio=5 os_prio=0 tid=0x00007f0e62713800 nid=0x5b36 runnable [0x00007f0e396c0000]
+   java.lang.Thread.State: RUNNABLE
+	at java.io.FileOutputStream.$$YJP$$writeBytes(Native Method)
+	at java.io.FileOutputStream.writeBytes(FileOutputStream.java)
+	at java.io.FileOutputStream.write(FileOutputStream.java:326)
+	at java.io.BufferedOutputStream.write(BufferedOutputStream.java:122)
+	- locked <0x00000005cb889ed0> (a java.io.BufferedOutputStream)
+	at java.io.PrintStream.write(PrintStream.java:480)
+	- locked <0x00000005cb889eb0> (a java.io.PrintStream)
+	at sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:221)
+	at sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:291)
+	at sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:104)
+	- locked <0x00000005cb88a0b0> (a java.io.OutputStreamWriter)
+	at java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:185)
+	at java.io.PrintStream.write(PrintStream.java:527)
+	- locked <0x00000005cb889eb0> (a java.io.PrintStream)
+	at java.io.PrintStream.print(PrintStream.java:669)
+	at java.io.PrintStream.append(PrintStream.java:1065)
+	at java.io.PrintStream.append(PrintStream.java:57)
+	at java.util.Formatter$FormatSpecifier.print(Formatter.java:2913)
+	at java.util.Formatter$FormatSpecifier.printString(Formatter.java:2886)
+	at java.util.Formatter$FormatSpecifier.print(Formatter.java:2763)
+	at java.util.Formatter.format(Formatter.java:2520)
+	at java.io.PrintStream.format(PrintStream.java:970)
+	- locked <0x00000005cb889eb0> (a java.io.PrintStream)
+	at reactor.util.Loggers$ConsoleLogger.debug(Loggers.java:497)
+	- locked <0x00000005cbb25b28> (a reactor.util.Loggers$ConsoleLogger)
+	at reactor.ipc.netty.channel.ChannelOperationsHandler.userEventTriggered(ChannelOperationsHandler.java:226)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.channel.ChannelInboundHandlerAdapter.userEventTriggered(ChannelInboundHandlerAdapter.java:108)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireUserEventTriggered(CombinedChannelDuplexHandler.java:432)
+	at io.netty.channel.ChannelInboundHandlerAdapter.userEventTriggered(ChannelInboundHandlerAdapter.java:108)
+	at io.netty.handler.codec.ByteToMessageDecoder.userEventTriggered(ByteToMessageDecoder.java:353)
+	at io.netty.handler.codec.http.HttpObjectDecoder.userEventTriggered(HttpObjectDecoder.java:460)
+	at io.netty.channel.CombinedChannelDuplexHandler.userEventTriggered(CombinedChannelDuplexHandler.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.handler.logging.LoggingHandler.userEventTriggered(LoggingHandler.java:183)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.userEventTriggered(DefaultChannelPipeline.java:1377)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.DefaultChannelPipeline.fireUserEventTriggered(DefaultChannelPipeline.java:929)
+	at reactor.ipc.netty.channel.ChannelOperations.onHandlerTerminate(ChannelOperations.java:427)
+	at reactor.ipc.netty.http.server.HttpServerOperations.onOutboundComplete(HttpServerOperations.java:407)
+	at reactor.ipc.netty.channel.ChannelOperations.onComplete(ChannelOperations.java:219)
+	at reactor.core.publisher.Operators.complete(Operators.java:125)
+	at reactor.ipc.netty.FutureMono$DeferredFutureMono.subscribe(FutureMono.java:117)
+	at reactor.ipc.netty.channel.ChannelOperations.applyHandler(ChannelOperations.java:383)
+	at reactor.ipc.netty.http.server.HttpServerOperations.onHandlerStart(HttpServerOperations.java:359)
+	at reactor.ipc.netty.channel.ContextHandler$$Lambda$54/1591608593.run(Unknown Source)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:163)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:404)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:463)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-3" #22 daemon prio=5 os_prio=0 tid=0x00007f0e62ba5000 nid=0x5b35 waiting for monitor entry [0x00007f0e3ad98000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+	at reactor.util.Loggers$ConsoleLogger.trace(Loggers.java:477)
+	- waiting to lock <0x00000005cbb25b28> (a reactor.util.Loggers$ConsoleLogger)
+	at reactor.ipc.netty.channel.ChannelOperationsHandler.userEventTriggered(ChannelOperationsHandler.java:215)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireUserEventTriggered(CombinedChannelDuplexHandler.java:432)
+	at io.netty.channel.ChannelInboundHandlerAdapter.userEventTriggered(ChannelInboundHandlerAdapter.java:108)
+	at io.netty.handler.codec.ByteToMessageDecoder.userEventTriggered(ByteToMessageDecoder.java:353)
+	at io.netty.handler.codec.http.HttpObjectDecoder.userEventTriggered(HttpObjectDecoder.java:460)
+	at io.netty.channel.CombinedChannelDuplexHandler.userEventTriggered(CombinedChannelDuplexHandler.java:243)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.handler.logging.LoggingHandler.userEventTriggered(LoggingHandler.java:183)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.AbstractChannelHandlerContext.fireUserEventTriggered(AbstractChannelHandlerContext.java:307)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.userEventTriggered(DefaultChannelPipeline.java:1377)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:329)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeUserEventTriggered(AbstractChannelHandlerContext.java:315)
+	at io.netty.channel.DefaultChannelPipeline.fireUserEventTriggered(DefaultChannelPipeline.java:929)
+	at reactor.ipc.netty.channel.ChannelOperations.onHandlerTerminate(ChannelOperations.java:427)
+	at reactor.ipc.netty.http.client.HttpClientOperations.onInboundNext(HttpClientOperations.java:575)
+	at reactor.ipc.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:134)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:438)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:310)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:284)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:253)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+	at io.netty.handler.logging.LoggingHandler.channelRead(LoggingHandler.java:241)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:340)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1359)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:362)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:348)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:935)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:141)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:645)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:580)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:497)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:459)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-2" #21 daemon prio=5 os_prio=0 tid=0x00007f0e62ba4000 nid=0x5b34 runnable [0x00007f0e39bc2000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cb81de98> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cb81deb0> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cb81de50> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"reactor-http-nio-1" #20 daemon prio=5 os_prio=0 tid=0x00007f0e62ac7000 nid=0x5b33 runnable [0x00007f0e39cc3000]
+   java.lang.Thread.State: RUNNABLE
+	at sun.nio.ch.EPollArrayWrapper.$$YJP$$epollWait(Native Method)
+	at sun.nio.ch.EPollArrayWrapper.epollWait(EPollArrayWrapper.java)
+	at sun.nio.ch.EPollArrayWrapper.poll(EPollArrayWrapper.java:269)
+	at sun.nio.ch.EPollSelectorImpl.doSelect(EPollSelectorImpl.java:93)
+	at sun.nio.ch.SelectorImpl.lockAndDoSelect(SelectorImpl.java:86)
+	- locked <0x00000005cb825ef0> (a io.netty.channel.nio.SelectedSelectionKeySet)
+	- locked <0x00000005cb825f08> (a java.util.Collections$UnmodifiableSet)
+	- locked <0x00000005cb825ea8> (a sun.nio.ch.EPollSelectorImpl)
+	at sun.nio.ch.SelectorImpl.select(SelectorImpl.java:97)
+	at io.netty.channel.nio.SelectedSelectionKeySetSelector.select(SelectedSelectionKeySetSelector.java:62)
+	at io.netty.channel.nio.NioEventLoop.select(NioEventLoop.java:753)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:409)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:886)
+	at java.lang.Thread.run(Thread.java:748)
+
+"Service Thread" #16 daemon prio=9 os_prio=0 tid=0x00007f0e6243f000 nid=0x5acc runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C1 CompilerThread3" #15 daemon prio=9 os_prio=0 tid=0x00007f0e6243e800 nid=0x5acb waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread2" #14 daemon prio=9 os_prio=0 tid=0x00007f0e62435800 nid=0x5aca waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread1" #13 daemon prio=9 os_prio=0 tid=0x00007f0e62435000 nid=0x5ac9 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"C2 CompilerThread0" #12 daemon prio=9 os_prio=0 tid=0x00007f0e62432800 nid=0x5ac8 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Monitor Ctrl-Break" #11 daemon prio=5 os_prio=0 tid=0x00007f0e6241b800 nid=0x5ac7 runnable [0x00007f0e3a88c000]
+   java.lang.Thread.State: RUNNABLE
+	at java.net.SocketInputStream.$$YJP$$socketRead0(Native Method)
+	at java.net.SocketInputStream.socketRead0(SocketInputStream.java)
+	at java.net.SocketInputStream.socketRead(SocketInputStream.java:116)
+	at java.net.SocketInputStream.read(SocketInputStream.java:171)
+	at java.net.SocketInputStream.read(SocketInputStream.java:141)
+	at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:284)
+	at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:326)
+	at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:178)
+	- locked <0x00000005cb813f00> (a java.io.InputStreamReader)
+	at java.io.InputStreamReader.read(InputStreamReader.java:184)
+	at java.io.BufferedReader.fill(BufferedReader.java:161)
+	at java.io.BufferedReader.readLine(BufferedReader.java:324)
+	- locked <0x00000005cb813f00> (a java.io.InputStreamReader)
+	at java.io.BufferedReader.readLine(BufferedReader.java:389)
+	at com.intellij.rt.execution.application.AppMainV2$1.run(AppMainV2.java:64)
+
+"YJPAgent-OOMESnapshotDetector" #9 daemon prio=10 os_prio=0 tid=0x00007f0e623b3800 nid=0x5ac5 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"YJPAgent-CPUSampler" #8 daemon prio=10 os_prio=0 tid=0x00007f0e623b3000 nid=0x5ac4 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"YJPAgent-RequestListener" #6 daemon prio=1 os_prio=0 tid=0x00007f0e623b1800 nid=0x5ac2 runnable [0x00007f0e3ae9a000]
+   java.lang.Thread.State: RUNNABLE
+	at java.net.PlainSocketImpl.$$YJP$$socketAccept(Native Method)
+	at java.net.PlainSocketImpl.socketAccept(PlainSocketImpl.java)
+	at java.net.AbstractPlainSocketImpl.accept(AbstractPlainSocketImpl.java:409)
+	at java.net.ServerSocket.implAccept(ServerSocket.java:545)
+	at java.net.ServerSocket.accept(ServerSocket.java:513)
+	at com.yourkit.runtime.Core$4.run(Core.java:753)
+	at java.lang.Thread.run(Thread.java:748)
+
+"YJPAgent-Telemetry" #5 daemon prio=5 os_prio=0 tid=0x00007f0e623ae800 nid=0x5ac1 in Object.wait() [0x00007f0e3af9b000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+	at java.lang.Object.$$YJP$$wait(Native Method)
+	at java.lang.Object.wait(Object.java)
+	at com.yourkit.runtime.TelemetryThread.run(TelemetryThread.java:627)
+	- locked <0x00000005cb81e6f8> (a java.lang.Object)
+
+"Signal Dispatcher" #4 daemon prio=9 os_prio=0 tid=0x00007f0e62258800 nid=0x5ac0 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+"Finalizer" #3 daemon prio=8 os_prio=0 tid=0x00007f0e604e4000 nid=0x5abf in Object.wait() [0x00007f0e3b793000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.$$YJP$$wait(Native Method)
+	at java.lang.Object.wait(Object.java)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:143)
+	- locked <0x00000005cb822a90> (a java.lang.ref.ReferenceQueue$Lock)
+	at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:164)
+	at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:209)
+
+"Reference Handler" #2 daemon prio=10 os_prio=0 tid=0x00007f0e6215e000 nid=0x5abe in Object.wait() [0x00007f0e3b894000]
+   java.lang.Thread.State: WAITING (on object monitor)
+	at java.lang.Object.$$YJP$$wait(Native Method)
+	at java.lang.Object.wait(Object.java)
+	at java.lang.Object.wait(Object.java:502)
+	at java.lang.ref.Reference.tryHandlePending(Reference.java:191)
+	- locked <0x00000005cb826710> (a java.lang.ref.Reference$Lock)
+	at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:153)
+
+"main" #1 prio=5 os_prio=0 tid=0x00007f0e60195000 nid=0x5aa9 waiting on condition [0x00007f0e67109000]
+   java.lang.Thread.State: WAITING (parking)
+	at sun.misc.Unsafe.park(Native Method)
+	- parking to wait for  <0x000000072658c4d0> (a java.util.concurrent.CountDownLatch$Sync)
+	at java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.parkAndCheckInterrupt(AbstractQueuedSynchronizer.java:836)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.doAcquireSharedInterruptibly(AbstractQueuedSynchronizer.java:997)
+	at java.util.concurrent.locks.AbstractQueuedSynchronizer.acquireSharedInterruptibly(AbstractQueuedSynchronizer.java:1304)
+	at java.util.concurrent.CountDownLatch.await(CountDownLatch.java:231)
+	at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:77)
+	at reactor.core.publisher.Flux.blockLast(Flux.java:1977)
+	at sample.ReactorNettyHangTests.redirectTests(ReactorNettyHangTests.java:70)
+	at sample.ReactorNettyHangTests.deadlockWhenRedirectsToSameUrl(ReactorNettyHangTests.java:37)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+	at com.intellij.junit4.JUnit4IdeaTestRunner.startRunnerWithArgs(JUnit4IdeaTestRunner.java:68)
+	at com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:51)
+	at com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)
+	at com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)
+
+"VM Thread" os_prio=0 tid=0x00007f0e60404800 nid=0x5abd runnable 
+
+"GC task thread#0 (ParallelGC)" os_prio=0 tid=0x00007f0e601e5800 nid=0x5ab2 runnable 
+
+"GC task thread#1 (ParallelGC)" os_prio=0 tid=0x00007f0e6018d800 nid=0x5ab3 runnable 
+
+"GC task thread#2 (ParallelGC)" os_prio=0 tid=0x00007f0e600e9000 nid=0x5ab4 runnable 
+
+"GC task thread#3 (ParallelGC)" os_prio=0 tid=0x00007f0e600ea800 nid=0x5ab5 runnable 
+
+"GC task thread#4 (ParallelGC)" os_prio=0 tid=0x00007f0e600ec000 nid=0x5ab6 runnable 
+
+"GC task thread#5 (ParallelGC)" os_prio=0 tid=0x00007f0e600ee000 nid=0x5ab7 runnable 
+
+"GC task thread#6 (ParallelGC)" os_prio=0 tid=0x00007f0e6022a000 nid=0x5ab8 runnable 
+
+"GC task thread#7 (ParallelGC)" os_prio=0 tid=0x00007f0e6022b800 nid=0x5ab9 runnable 
+
+"VM Periodic Task Thread" os_prio=0 tid=0x00007f0e6240f000 nid=0x5acd waiting on condition 
+
+JNI global references: 6868
+
