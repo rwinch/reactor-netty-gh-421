@@ -1,6 +1,6 @@
 def projectProperties = [
 	[$class: 'BuildDiscarderProperty',
-		strategy: [$class: 'LogRotator', numToKeepStr: '50']]]
+		strategy: [$class: 'LogRotator', numToKeepStr: '5']]]
 properties(projectProperties)
 
 stage('Check Dependencies') {
