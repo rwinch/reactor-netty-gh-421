@@ -1,21 +1,16 @@
 package sample;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.NettyDataBufferFactory;
-import org.springframework.http.server.reactive.ServerHttpResponse;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.http.server.HttpServerRequest;
 import reactor.ipc.netty.http.server.HttpServerResponse;
 
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.function.BiFunction;
 
@@ -49,16 +44,18 @@ class DeadlockHandler
 
 	private Mono<Void> write(boolean error,
 			HttpServerResponse response) {
-		NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
-		ServerHttpResponse adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
+		String loginPage = login(error);
+		return write(response, loginPage);
+	}
 
-		Mono<String> result = Mono.justOrEmpty(login(error));
-		Flux<DataBuffer> encoded = Flux.from(result).map(charSequence -> {
-			CharBuffer charBuffer = CharBuffer.wrap(charSequence);
-			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(charBuffer);
-			return bufferFactory.wrap(byteBuffer);
-		});
-		return adaptedResponse.writeWith(encoded);
+	private Mono<Void> write(HttpServerResponse response, String loginPage) {
+		ByteBuf buffer = response.alloc().buffer();
+		buffer.writeBytes(loginPage.getBytes(StandardCharsets.UTF_8));
+		return response
+				.status(HttpResponseStatus.OK)
+				.addHeader(HttpHeaderNames.CONTENT_TYPE, "text/html")
+				.send(Mono.just(buffer))
+				.then();
 	}
 
 	private boolean isLogin(HttpServerRequest request) {
