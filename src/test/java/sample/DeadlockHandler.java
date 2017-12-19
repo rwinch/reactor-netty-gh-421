@@ -28,17 +28,15 @@ class DeadlockHandler
 		if (isLogin(request)) {
 			return Mono.just(response)
 					.publishOn(Schedulers.parallel())
-					.flatMap(this::redirect);
+					.flatMap(this::loginError);
 		}
-		boolean error = request.uri().endsWith("?error");
-		return write(error, response);
+		return writeLoginErrorPage(response);
 	}
 
-	private Mono<Void> write(boolean error,
-			HttpServerResponse response) {
-		String loginPage = login(error);
+	private Mono<Void> writeLoginErrorPage(HttpServerResponse response) {
+		String loginErrorPage = loginErrorPage();
 		ByteBuf buffer = response.alloc().buffer();
-		buffer.writeBytes(loginPage.getBytes(StandardCharsets.UTF_8));
+		buffer.writeBytes(loginErrorPage.getBytes(StandardCharsets.UTF_8));
 		return response
 				.status(HttpResponseStatus.OK)
 				.addHeader(HttpHeaderNames.CONTENT_TYPE, "text/html")
@@ -51,14 +49,14 @@ class DeadlockHandler
 				"/login".equals(request.uri());
 	}
 
-	public Mono<Void> redirect(HttpServerResponse response) {
+	public Mono<Void> loginError(HttpServerResponse response) {
 		return response
 				.status(HttpResponseStatus.MOVED_PERMANENTLY)
 				.header(HttpHeaderNames.LOCATION, "/login?error")
 				.send();
 	}
 
-	private String login(boolean error) {
+	private String loginErrorPage() {
 		return "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n"
 				+ "\t<meta charset=\"utf-8\">\n"
 				+ "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n"
@@ -67,7 +65,7 @@ class DeadlockHandler
 				+ "\t<title>Please Log In</title>\n" + "</head>\n" + "<body>\n" + "<div class=\"container\">\n"
 				+ "\t<form class=\"form-signin\" method=\"post\" action=\"/login\">\n"
 				+ "\t\t<h2 class=\"form-signin-heading\">Please Log In</h2>\n"
-				+ error(error)
+				+ "\t\t<div class=\"alert alert-danger\" role=\"alert\">Invalid\n" + "\t\t\tusername and password.</div>\n"
 				+ "\t\t\t<label for=\"username\" class=\"sr-only\">Username</label>\n"
 				+ "\t\t\t<input type=\"text\" id=\"username\" name=\"username\" class=\"form-control\" placeholder=\"Username\" required autofocus>\n"
 				+ "\t\t</p>\n" + "\t\t<p>\n"
@@ -76,12 +74,5 @@ class DeadlockHandler
 				+ "\t\t</p>\n"
 				+ "\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\n"
 				+ "\t</form>\n" + "</div>\n" + "</body>\n" + "</html>";
-	}
-
-	private String error(boolean error) {
-		if (error) {
-			return "\t\t<div class=\"alert alert-danger\" role=\"alert\">Invalid\n" + "\t\t\tusername and password.</div>\n";
-		}
-		return "";
 	}
 }
