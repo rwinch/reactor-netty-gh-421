@@ -39,6 +39,9 @@ import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.NettyContext;
 
 import javax.servlet.Servlet;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URI;
 import java.util.Collections;
 
@@ -50,8 +53,7 @@ import java.util.Collections;
 @EnableWebFlux
 @ComponentScan
 public class WebfluxFormApplication {
-	@Value("${server.port:8080}")
-	private int port = 8080;
+	private int port = availablePort();
 
 	public static void main(String[] args) throws Exception {
 		try(AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
@@ -134,6 +136,14 @@ public class WebfluxFormApplication {
 				return "\t\t<div class=\"alert alert-danger\" role=\"alert\">Invalid\n" + "\t\t\tusername and password.</div>\n";
 			}
 			return "";
+		}
+	}
+
+	static final int availablePort() {
+		try(ServerSocket socket = new ServerSocket(0)) {
+			return socket.getLocalPort();
+		} catch(IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
