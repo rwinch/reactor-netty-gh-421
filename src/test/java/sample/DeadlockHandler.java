@@ -37,10 +37,6 @@ class DeadlockHandler
 	private Mono<Void> write(boolean error,
 			HttpServerResponse response) {
 		String loginPage = login(error);
-		return write(response, loginPage);
-	}
-
-	private Mono<Void> write(HttpServerResponse response, String loginPage) {
 		ByteBuf buffer = response.alloc().buffer();
 		buffer.writeBytes(loginPage.getBytes(StandardCharsets.UTF_8));
 		return response
