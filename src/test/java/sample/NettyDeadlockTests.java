@@ -20,23 +20,17 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.server.HttpServer;
-import sample.webdriver.IndexPage;
 import sample.webdriver.LoginPage;
 
 /**
  * @author Rob Winch
  * @since 5.0
  */
-public class WebfluxFormApplicationTests {
+public class NettyDeadlockTests {
 	private static NettyContext nettyContext;
 
 	WebDriver driver;
@@ -47,7 +41,7 @@ public class WebfluxFormApplicationTests {
 	public static void startReactor() {
 		DeadlockHandler handler = new DeadlockHandler();
 		HttpServer httpServer = HttpServer.create("localhost", 0);
-		WebfluxFormApplicationTests.nettyContext = httpServer.newHandler(handler).block();
+		NettyDeadlockTests.nettyContext = httpServer.newHandler(handler).block();
 	}
 
 	@AfterClass
