@@ -16,10 +16,13 @@
 
 package sample;
 
-import org.reactivestreams.Publisher;
+import org.apache.catalina.Context;
+import org.apache.catalina.startup.Tomcat;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.codec.CharSequenceEncoder;
 import org.springframework.http.HttpMethod;
@@ -27,18 +30,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.EncoderHttpMessageWriter;
 import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
 import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilterChain;
-import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.NettyContext;
-import reactor.ipc.netty.http.server.HttpServer;
 
+import javax.servlet.Servlet;
 import java.net.URI;
 import java.util.Collections;
 
@@ -60,13 +60,17 @@ public class WebfluxFormApplication {
 		}
 	}
 
-	@Profile("default")
-	@Bean
-	public NettyContext nettyContext(ApplicationContext context) {
+	@Bean(destroyMethod = "stop", initMethod = "start")
+	public Tomcat tomcat() throws Exception {
 		HttpHandler handler = new DeadlockHandler();
-		ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
-		HttpServer httpServer = HttpServer.create("localhost", port);
-		return httpServer.newHandler(adapter).block();
+		Servlet servlet = new ServletHttpHandlerAdapter(handler);
+		Tomcat server = new Tomcat();
+		server.setPort(this.port);
+		server.getServer().setPort(this.port);
+		Context rootContext = server.addContext("", System.getProperty("java.io.tmpdir"));
+		Tomcat.addServlet(rootContext, "servlet", servlet);
+		rootContext.addServletMapping("/", "servlet");
+		return server;
 	}
 
 	static class DeadlockHandler implements HttpHandler {

@@ -30,9 +30,9 @@ repositories {
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
+	compile 'org.springframework.boot:spring-boot-starter-tomcat'
 	compile 'com.fasterxml.jackson.core:jackson-databind'
 	compile 'io.netty:netty-buffer'
-	compile 'io.projectreactor.ipc:reactor-netty:0.7.3.BUILD-SNAPSHOT'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.projectreactor:reactor-test'
