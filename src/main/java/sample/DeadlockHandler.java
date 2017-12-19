@@ -1,12 +1,12 @@
 package sample;
 
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.HttpHeadResponseDecorator;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -37,39 +37,25 @@ class DeadlockHandler
 	public Mono<Void> apply(HttpServerRequest request, HttpServerResponse response) {
 
 		NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
-		ServerHttpRequest adaptedRequest;
-		ServerHttpResponse adaptedResponse;
-		try {
-			adaptedRequest = new ReactorServerHttpRequest(request, bufferFactory);
-			adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
-		}
-		catch (URISyntaxException ex) {
-			logger.error("Invalid URL " + ex.getMessage(), ex);
-			response.status(HttpResponseStatus.BAD_REQUEST);
-			return Mono.empty();
-		}
+		ServerHttpResponse adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
 
-		if (HttpMethod.HEAD.equals(adaptedRequest.getMethod())) {
-			adaptedResponse = new HttpHeadResponseDecorator(adaptedResponse);
-		}
-
-		return this.handle(adaptedRequest, adaptedResponse).onErrorResume(ex -> {
+		return this.handle(request, adaptedResponse).onErrorResume(ex -> {
 			logger.error("Could not complete request", ex);
 			response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR);
 			return Mono.empty();
 		}).doOnSuccess(aVoid -> logger.debug("Successfully completed request"));
 	}
 
-	public Mono<Void> handle(ServerHttpRequest request, ServerHttpResponse response) {
+	public Mono<Void> handle(HttpServerRequest request, ServerHttpResponse response) {
 		if (isLogin(request)) {
 			return Mono.just(response).publishOn(Schedulers.parallel())
 					.flatMap(this::redirect);
 		}
-		boolean error = request.getQueryParams().containsKey("error");
-		return write(error, request, response);
+		boolean error = request.uri().endsWith("?error");
+		return write(error, response);
 	}
 
-	private Mono<Void> write(boolean error, ServerHttpRequest request,
+	private Mono<Void> write(boolean error,
 			ServerHttpResponse response) {
 		Mono<String> result = Mono.justOrEmpty(login(error));
 		DataBufferFactory bufferFactory = response.bufferFactory();
@@ -81,9 +67,9 @@ class DeadlockHandler
 		return response.writeWith(encoded);
 	}
 
-	private boolean isLogin(ServerHttpRequest request) {
-		return request.getMethod().equals(HttpMethod.POST) && "/login"
-				.equals(request.getPath().pathWithinApplication().value());
+	private boolean isLogin(HttpServerRequest request) {
+		return request.method().equals(HttpMethod.POST) && "/login"
+				.equals(request.uri());
 	}
 
 	public Mono<Void> redirect(ServerHttpResponse response) {
