@@ -43,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Rob Winch
  * @since 5.0
  */
-public class NettyDeadlockTests {
+public class NettyHangsTests {
 	private static NettyContext nettyContext;
 
 	int port;
@@ -52,7 +52,7 @@ public class NettyDeadlockTests {
 	public static void startReactor() {
 		DeadlockHandler handler = new DeadlockHandler();
 		HttpServer httpServer = HttpServer.create("localhost", 0);
-		NettyDeadlockTests.nettyContext = httpServer.newHandler(handler).block();
+		NettyHangsTests.nettyContext = httpServer.newHandler(handler).block();
 	}
 
 	@AfterClass
