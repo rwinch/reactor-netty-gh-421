@@ -47,8 +47,6 @@ public class IndexController {
 				+ "\t<meta name=\"description\" content=\"\">\n"
 				+ "\t<meta name=\"author\" content=\"\">\n"
 				+ "\t<title>Please Log In</title>\n"
-				+ "\t<link href=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M\" crossorigin=\"anonymous\">\n"
-				+ "\t<link href=\"http://getbootstrap.com/docs/4.0/examples/signin/signin.css\" rel=\"stylesheet\" crossorigin=\"anonymous\"/>\n"
 				+ "</head>\n" + "<body>\n" + "<div class=\"container\">\n"
 				+ "\t<form class=\"form-signin\" method=\"post\" action=\"/login\">\n"
 				+ "\t\t<h2 class=\"form-signin-heading\">Please Log In</h2>\n"
