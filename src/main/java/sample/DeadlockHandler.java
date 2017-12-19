@@ -1,5 +1,6 @@
 package sample;
 
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.logging.Log;
@@ -36,20 +37,21 @@ class DeadlockHandler
 		NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
 		ServerHttpResponse adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
 
-		return this.handle(request, adaptedResponse).onErrorResume(ex -> {
+		return this.handle(request, response, adaptedResponse).onErrorResume(ex -> {
 			logger.error("Could not complete request", ex);
 			response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR);
 			return Mono.empty();
 		}).doOnSuccess(aVoid -> logger.debug("Successfully completed request"));
 	}
 
-	public Mono<Void> handle(HttpServerRequest request, ServerHttpResponse response) {
+	public Mono<Void> handle(HttpServerRequest request, HttpServerResponse response, ServerHttpResponse adaptedResponse) {
 		if (isLogin(request)) {
-			return Mono.just(response).publishOn(Schedulers.parallel())
+			return Mono.just(response)
+					.publishOn(Schedulers.parallel())
 					.flatMap(this::redirect);
 		}
 		boolean error = request.uri().endsWith("?error");
-		return write(error, response);
+		return write(error, adaptedResponse);
 	}
 
 	private Mono<Void> write(boolean error,
@@ -69,12 +71,11 @@ class DeadlockHandler
 				.equals(request.uri());
 	}
 
-	public Mono<Void> redirect(ServerHttpResponse response) {
-		return Mono.defer(() -> {
-			response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-			response.getHeaders().setLocation(URI.create("/login?error"));
-			return response.setComplete();
-		});
+	public Mono<Void> redirect(HttpServerResponse response) {
+		return response
+				.status(HttpResponseStatus.MOVED_PERMANENTLY)
+				.header(HttpHeaderNames.LOCATION, "/login?error")
+				.send();
 	}
 
 	private String login(boolean error) {
