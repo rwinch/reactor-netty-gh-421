@@ -59,19 +59,15 @@ public class NettyDeadlockTests {
 
 	@Test
 	public void loginWhenInvalidUsernameThenError() throws Exception {
-		LoginPage login = LoginPage.to(this.driver, this.port);
-		login.assertAt();
-
-		login
-			.loginForm()
-			.username("user")
-			.password("invalid")
-			.submit(LoginPage.class)
-			.assertError();
+		runLoginFailedTest();
 	}
 
 	@Test
 	public void loginAndInvalidAgain() throws Exception {
+		runLoginFailedTest();
+	}
+
+	private void runLoginFailedTest() {
 		LoginPage login = LoginPage.to(this.driver, this.port);
 		login.assertAt();
 
@@ -81,6 +77,5 @@ public class NettyDeadlockTests {
 				.password("invalid")
 				.submit(LoginPage.class)
 				.assertError();
-
 	}
 }
