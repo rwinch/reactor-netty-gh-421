@@ -16,7 +16,9 @@
 package sample;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
@@ -25,6 +27,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import reactor.ipc.netty.NettyContext;
+import reactor.ipc.netty.http.server.HttpServer;
 import sample.webdriver.IndexPage;
 import sample.webdriver.LoginPage;
 
@@ -32,17 +36,30 @@ import sample.webdriver.LoginPage;
  * @author Rob Winch
  * @since 5.0
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = WebfluxFormApplication.class)
-@TestPropertySource(properties = "server.port=0")
 public class WebfluxFormApplicationTests {
+	private static NettyContext nettyContext;
+
 	WebDriver driver;
 
-	@Value("#{@nettyContext.address().getPort()}")
 	int port;
+
+	@BeforeClass
+	public static void startReactor() {
+		DeadlockHandler handler = new DeadlockHandler();
+		HttpServer httpServer = HttpServer.create("localhost", 0);
+		WebfluxFormApplicationTests.nettyContext = httpServer.newHandler(handler).block();
+	}
+
+	@AfterClass
+	public static void shutdownReactor() {
+		if(nettyContext != null) {
+			nettyContext.dispose();
+		}
+	}
 
 	@Before
 	public void setup() {
+		this.port = nettyContext.address().getPort();
 		this.driver = new HtmlUnitDriver(BrowserVersion.CHROME);
 	}
 
