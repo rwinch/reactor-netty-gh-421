@@ -24,7 +24,7 @@ class DeadlockHandler
 		if (isLogin(request)) {
 			return Mono.just(response)
 					.publishOn(Schedulers.parallel())
-					.flatMap(this::loginError);
+					.flatMap(r -> loginError(request, r));
 		}
 		return writeLoginErrorPage(response);
 	}
@@ -45,10 +45,11 @@ class DeadlockHandler
 				"/login".equals(request.uri());
 	}
 
-	public Mono<Void> loginError(HttpServerResponse response) {
+	public Mono<Void> loginError(HttpServerRequest request, HttpServerResponse response) {
+		int port = Integer.parseInt(request.requestHeaders().get(HttpHeaderNames.HOST).split(":")[1]);
 		return response
 				.status(HttpResponseStatus.MOVED_PERMANENTLY)
-				.header(HttpHeaderNames.LOCATION, "/login?error")
+				.header(HttpHeaderNames.LOCATION, "http://localhost:" + port  + "/login?error")
 				.send();
 	}
 
