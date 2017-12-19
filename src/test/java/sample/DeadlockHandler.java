@@ -25,14 +25,6 @@ class DeadlockHandler
 
 	@Override
 	public Mono<Void> apply(HttpServerRequest request, HttpServerResponse response) {
-		return this.handle(request, response).onErrorResume(ex -> {
-			logger.error("Could not complete request", ex);
-			response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR);
-			return Mono.empty();
-		}).doOnSuccess(aVoid -> logger.debug("Successfully completed request"));
-	}
-
-	public Mono<Void> handle(HttpServerRequest request, HttpServerResponse response) {
 		if (isLogin(request)) {
 			return Mono.just(response)
 					.publishOn(Schedulers.parallel())
@@ -59,8 +51,8 @@ class DeadlockHandler
 	}
 
 	private boolean isLogin(HttpServerRequest request) {
-		return request.method().equals(HttpMethod.POST) && "/login"
-				.equals(request.uri());
+		return request.method().equals(HttpMethod.POST) &&
+				"/login".equals(request.uri());
 	}
 
 	public Mono<Void> redirect(HttpServerResponse response) {
