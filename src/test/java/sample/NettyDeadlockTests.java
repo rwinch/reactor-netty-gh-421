@@ -16,6 +16,19 @@
 package sample;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,6 +39,10 @@ import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.server.HttpServer;
 import sample.webdriver.LoginPage;
 
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * @author Rob Winch
  * @since 5.0
@@ -33,7 +50,7 @@ import sample.webdriver.LoginPage;
 public class NettyDeadlockTests {
 	private static NettyContext nettyContext;
 
-	WebDriver driver;
+	HtmlUnitDriver driver;
 
 	int port;
 
@@ -67,15 +84,27 @@ public class NettyDeadlockTests {
 		runLoginFailedTest();
 	}
 
-	private void runLoginFailedTest() {
-		LoginPage login = LoginPage.to(this.driver, this.port);
-		login.assertAt();
+	private void runLoginFailedTest() throws Exception {
+		HttpHost host = new HttpHost("localhost", this.port, "http");
+		CloseableHttpClient client = HttpClientBuilder.create()
+				.setRedirectStrategy(new DefaultRedirectStrategy())
+				.build();
+		HttpRequest context = new HttpGet("/login");
+		String body = EntityUtils.toString(client.execute(host, context).getEntity());
+		assertThat(body).contains("Please Log In");
 
-		login
-				.loginForm()
-				.username("user")
-				.password("invalid")
-				.submit(LoginPage.class)
-				.assertError();
+		HttpPost login = new HttpPost("/login");
+		login.setEntity(new UrlEncodedFormEntity(Arrays.asList(
+				new BasicNameValuePair("username", "user"),
+				new BasicNameValuePair("password", "invalid")
+		)));
+
+		CloseableHttpResponse loginFailed = client.execute(host, login);
+		Header location = loginFailed.getFirstHeader("location");
+
+		loginFailed = client.execute(host,
+				new HttpGet(location.getValue()));
+		assertThat(EntityUtils.toString(loginFailed.getEntity())).contains("role=\"alert\"");
+
 	}
 }
