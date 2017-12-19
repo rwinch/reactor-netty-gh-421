@@ -16,7 +16,7 @@ import java.util.function.BiFunction;
  * @author Rob Winch
  * @since 5.0
  */
-class DeadlockHandler
+class TheBugHandler
 		implements BiFunction<HttpServerRequest, HttpServerResponse, Mono<Void>> {
 
 	@Override

@@ -50,7 +50,7 @@ public class NettyHangsTests {
 
 	@BeforeClass
 	public static void startReactor() {
-		DeadlockHandler handler = new DeadlockHandler();
+		TheBugHandler handler = new TheBugHandler();
 		HttpServer httpServer = HttpServer.create("localhost", 0);
 		NettyHangsTests.nettyContext = httpServer.newHandler(handler).block();
 	}
