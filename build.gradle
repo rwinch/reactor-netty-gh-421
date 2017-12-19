@@ -13,7 +13,6 @@ repositories {
 
 
 dependencies {
-	compile 'commons-logging:commons-logging:1.2'
 	compile 'io.projectreactor.ipc:reactor-netty:0.7.3.BUILD-SNAPSHOT'
 
 	testCompile 'junit:junit:4.12'

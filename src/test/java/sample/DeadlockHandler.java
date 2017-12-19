@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.http.server.HttpServerRequest;
@@ -20,8 +18,6 @@ import java.util.function.BiFunction;
  */
 class DeadlockHandler
 		implements BiFunction<HttpServerRequest, HttpServerResponse, Mono<Void>> {
-
-	private static final Log logger = LogFactory.getLog(DeadlockHandler.class);
 
 	@Override
 	public Mono<Void> apply(HttpServerRequest request, HttpServerResponse response) {
