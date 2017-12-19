@@ -20,6 +20,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -40,6 +41,7 @@ import reactor.ipc.netty.http.server.HttpServer;
 import sample.webdriver.LoginPage;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -85,8 +87,15 @@ public class NettyDeadlockTests {
 	}
 
 	private void runLoginFailedTest() throws Exception {
+		int timeoutInMs = 15000;
+		RequestConfig config = RequestConfig.custom()
+				.setConnectTimeout(timeoutInMs)
+				.setConnectionRequestTimeout(timeoutInMs)
+				.setSocketTimeout(timeoutInMs)
+				.build();
 		HttpHost host = new HttpHost("localhost", this.port, "http");
 		CloseableHttpClient client = HttpClientBuilder.create()
+				.setDefaultRequestConfig(config)
 				.setRedirectStrategy(new DefaultRedirectStrategy())
 				.build();
 		HttpRequest context = new HttpGet("/login");
