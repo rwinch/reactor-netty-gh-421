@@ -8,8 +8,6 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.reactive.HttpHeadResponseDecorator;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,7 +16,6 @@ import reactor.ipc.netty.http.server.HttpServerRequest;
 import reactor.ipc.netty.http.server.HttpServerResponse;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
