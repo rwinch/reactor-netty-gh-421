@@ -16,31 +16,38 @@
 
 package sample;
 
-import org.reactivestreams.Publisher;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.codec.CharSequenceEncoder;
+import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.EncoderHttpMessageWriter;
-import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
+import org.springframework.http.server.reactive.HttpHeadResponseDecorator;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.server.ServerWebExchange;
-import org.springframework.web.server.WebFilterChain;
-import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.server.HttpServer;
+import reactor.ipc.netty.http.server.HttpServerRequest;
+import reactor.ipc.netty.http.server.HttpServerResponse;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.function.BiFunction;
 
 /**
  * @author Rob Winch
@@ -63,15 +70,45 @@ public class WebfluxFormApplication {
 	@Profile("default")
 	@Bean
 	public NettyContext nettyContext(ApplicationContext context) {
-		HttpHandler handler = new DeadlockHandler();
-		ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
+		DeadlockHandler handler = new DeadlockHandler();
 		HttpServer httpServer = HttpServer.create("localhost", port);
-		return httpServer.newHandler(adapter).block();
+		return httpServer.newHandler(handler).block();
 	}
 
-	static class DeadlockHandler implements HttpHandler {
+	static class DeadlockHandler implements
+			BiFunction<HttpServerRequest, HttpServerResponse, Mono<Void>> {
+
+		private static final Log logger = LogFactory.getLog(DeadlockHandler.class);
 
 		@Override
+		public Mono<Void> apply(HttpServerRequest request, HttpServerResponse response) {
+
+			NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
+			ServerHttpRequest adaptedRequest;
+			ServerHttpResponse adaptedResponse;
+			try {
+				adaptedRequest = new ReactorServerHttpRequest(request, bufferFactory);
+				adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
+			}
+			catch (URISyntaxException ex) {
+				logger.error("Invalid URL " + ex.getMessage(), ex);
+				response.status(HttpResponseStatus.BAD_REQUEST);
+				return Mono.empty();
+			}
+
+			if (HttpMethod.HEAD.equals(adaptedRequest.getMethod())) {
+				adaptedResponse = new HttpHeadResponseDecorator(adaptedResponse);
+			}
+
+			return this.handle(adaptedRequest, adaptedResponse)
+					.onErrorResume(ex -> {
+						logger.error("Could not complete request", ex);
+						response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR);
+						return Mono.empty();
+					})
+					.doOnSuccess(aVoid -> logger.debug("Successfully completed request"));
+		}
+
 		public Mono<Void> handle(ServerHttpRequest request, ServerHttpResponse response) {
 			if (isLogin(request)) {
 				return Mono.just(response).publishOn(Schedulers.parallel())
