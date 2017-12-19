@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.codec.CharSequenceEncoder;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,8 @@ import org.springframework.http.codec.EncoderHttpMessageWriter;
 import org.springframework.http.server.reactive.HttpHeadResponseDecorator;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.util.MimeType;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.http.server.HttpServerRequest;
@@ -72,11 +75,12 @@ class DeadlockHandler
 			ServerHttpResponse response) {
 		Mono<String> result = Mono.justOrEmpty(login(error));
 		CharSequenceEncoder encoder = CharSequenceEncoder.allMimeTypes();
-		EncoderHttpMessageWriter writer = new EncoderHttpMessageWriter(encoder);
 		Class<String> type = String.class;
 		ResolvableType resolvableType = ResolvableType.forType(type);
-		return writer.write(result, resolvableType, resolvableType, MediaType.TEXT_HTML,
-				request, response, Collections.emptyMap());
+		Flux<DataBuffer> encoded = encoder
+				.encode(result, response.bufferFactory(), resolvableType, MimeType.valueOf("text/html"),
+						Collections.emptyMap());
+		return response.writeWith(encoded);
 	}
 
 	private boolean isLogin(ServerHttpRequest request) {
