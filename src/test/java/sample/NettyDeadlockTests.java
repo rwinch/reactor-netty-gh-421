@@ -15,11 +15,9 @@
  */
 package sample;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,14 +32,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.server.HttpServer;
-import sample.webdriver.LoginPage;
 
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,8 +45,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class NettyDeadlockTests {
 	private static NettyContext nettyContext;
-
-	HtmlUnitDriver driver;
 
 	int port;
 
@@ -73,7 +65,6 @@ public class NettyDeadlockTests {
 	@Before
 	public void setup() {
 		this.port = nettyContext.address().getPort();
-		this.driver = new HtmlUnitDriver(BrowserVersion.CHROME);
 	}
 
 	@Test

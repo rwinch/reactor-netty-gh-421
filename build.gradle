@@ -22,10 +22,7 @@ dependencies {
 	testCompile 'junit:junit:4.12'
 	testCompile 'org.assertj:assertj-core:3.8.0'
 	testCompile 'io.projectreactor:reactor-test:3.1.2.RELEASE'
-	testCompile('org.seleniumhq.selenium:htmlunit-driver:2.28.2') {
-		exclude module: 'commons-logging'
-	}
-	testCompile('org.seleniumhq.selenium:selenium-support:3.7.1') {
+	testCompile('org.apache.httpcomponents:httpclient:4.5.3') {
 		exclude module: 'commons-logging'
 	}
 }
