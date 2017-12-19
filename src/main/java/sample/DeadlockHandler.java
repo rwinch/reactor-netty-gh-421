@@ -6,9 +6,7 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,7 +14,6 @@ import reactor.core.scheduler.Schedulers;
 import reactor.ipc.netty.http.server.HttpServerRequest;
 import reactor.ipc.netty.http.server.HttpServerResponse;
 
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
@@ -33,37 +30,35 @@ class DeadlockHandler
 
 	@Override
 	public Mono<Void> apply(HttpServerRequest request, HttpServerResponse response) {
-
-		NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
-		ServerHttpResponse adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
-
-		return this.handle(request, response, adaptedResponse).onErrorResume(ex -> {
+		return this.handle(request, response).onErrorResume(ex -> {
 			logger.error("Could not complete request", ex);
 			response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR);
 			return Mono.empty();
 		}).doOnSuccess(aVoid -> logger.debug("Successfully completed request"));
 	}
 
-	public Mono<Void> handle(HttpServerRequest request, HttpServerResponse response, ServerHttpResponse adaptedResponse) {
+	public Mono<Void> handle(HttpServerRequest request, HttpServerResponse response) {
 		if (isLogin(request)) {
 			return Mono.just(response)
 					.publishOn(Schedulers.parallel())
 					.flatMap(this::redirect);
 		}
 		boolean error = request.uri().endsWith("?error");
-		return write(error, adaptedResponse);
+		return write(error, response);
 	}
 
 	private Mono<Void> write(boolean error,
-			ServerHttpResponse response) {
+			HttpServerResponse response) {
+		NettyDataBufferFactory bufferFactory = new NettyDataBufferFactory(response.alloc());
+		ServerHttpResponse adaptedResponse = new ReactorServerHttpResponse(response, bufferFactory);
+
 		Mono<String> result = Mono.justOrEmpty(login(error));
-		DataBufferFactory bufferFactory = response.bufferFactory();
 		Flux<DataBuffer> encoded = Flux.from(result).map(charSequence -> {
 			CharBuffer charBuffer = CharBuffer.wrap(charSequence);
 			ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(charBuffer);
 			return bufferFactory.wrap(byteBuffer);
 		});
-		return response.writeWith(encoded);
+		return adaptedResponse.writeWith(encoded);
 	}
 
 	private boolean isLogin(HttpServerRequest request) {
