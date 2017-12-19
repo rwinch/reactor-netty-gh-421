@@ -63,71 +63,73 @@ public class WebfluxFormApplication {
 	@Profile("default")
 	@Bean
 	public NettyContext nettyContext(ApplicationContext context) {
-		HttpHandler handler = new HttpHandler() {
-			@Override
-			public Mono<Void> handle(ServerHttpRequest request,
-					ServerHttpResponse response) {
-				if(isLogin(request)) {
-					return Mono.just(response)
-							.publishOn(Schedulers.parallel())
-							.flatMap(WebfluxFormApplication.this::redirect);
-				}
-				boolean error = request.getQueryParams().containsKey("error");
-				return write(error, request, response);
-			}
-		};
+		HttpHandler handler = new DeadlockHandler();
 		ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
 		HttpServer httpServer = HttpServer.create("localhost", port);
 		return httpServer.newHandler(adapter).block();
 	}
 
-	private Mono<Void> write(boolean error, ServerHttpRequest request, ServerHttpResponse response) {
-		Mono<String> result = Mono.justOrEmpty(login(error));
-		CharSequenceEncoder encoder = CharSequenceEncoder.allMimeTypes();
-		EncoderHttpMessageWriter writer = new EncoderHttpMessageWriter(encoder);
-		Class<String> type = String.class;
-		ResolvableType resolvableType = ResolvableType.forType(type);
-		return writer.write(result, resolvableType, resolvableType,
-			MediaType.TEXT_HTML, request, response, Collections.emptyMap());
-	}
+	static class DeadlockHandler implements HttpHandler {
 
-	private boolean isLogin(ServerHttpRequest request) {
-		return request.getMethod().equals(HttpMethod.POST) && "/login".equals(request.getPath().pathWithinApplication().value());
-	}
-
-	public Mono<Void> redirect(ServerHttpResponse response) {
-		return Mono.defer(() -> {
-			response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
-			response.getHeaders().setLocation(URI.create("/login?error"));
-			return response.setComplete();
-		});
-	}
-
-	private  String login(boolean error) {
-		return "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n"
-				+ "\t<meta charset=\"utf-8\">\n"
-				+ "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n"
-				+ "\t<meta name=\"description\" content=\"\">\n"
-				+ "\t<meta name=\"author\" content=\"\">\n"
-				+ "\t<title>Please Log In</title>\n"
-				+ "</head>\n" + "<body>\n" + "<div class=\"container\">\n"
-				+ "\t<form class=\"form-signin\" method=\"post\" action=\"/login\">\n"
-				+ "\t\t<h2 class=\"form-signin-heading\">Please Log In</h2>\n"
-				+ error(error)
-				+ "\t\t\t<label for=\"username\" class=\"sr-only\">Username</label>\n"
-				+ "\t\t\t<input type=\"text\" id=\"username\" name=\"username\" class=\"form-control\" placeholder=\"Username\" required autofocus>\n"
-				+ "\t\t</p>\n" + "\t\t<p>\n"
-				+ "\t\t\t<label for=\"password\" class=\"sr-only\">Password</label>\n"
-				+ "\t\t\t<input type=\"password\" id=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n"
-				+ "\t\t</p>\n"
-				+ "\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\n"
-				+ "\t</form>\n" + "</div>\n" + "</body>\n" + "</html>";
-	}
-
-	private String error(boolean error) {
-		if(error) {
-			return "\t\t<div class=\"alert alert-danger\" role=\"alert\">Invalid\n" + "\t\t\tusername and password.</div>\n";
+		@Override
+		public Mono<Void> handle(ServerHttpRequest request, ServerHttpResponse response) {
+			if (isLogin(request)) {
+				return Mono.just(response).publishOn(Schedulers.parallel())
+						.flatMap(this::redirect);
+			}
+			boolean error = request.getQueryParams().containsKey("error");
+			return write(error, request, response);
 		}
-		return "";
+
+		private Mono<Void> write(boolean error, ServerHttpRequest request,
+				ServerHttpResponse response) {
+			Mono<String> result = Mono.justOrEmpty(login(error));
+			CharSequenceEncoder encoder = CharSequenceEncoder.allMimeTypes();
+			EncoderHttpMessageWriter writer = new EncoderHttpMessageWriter(encoder);
+			Class<String> type = String.class;
+			ResolvableType resolvableType = ResolvableType.forType(type);
+			return writer.write(result, resolvableType, resolvableType, MediaType.TEXT_HTML,
+					request, response, Collections.emptyMap());
+		}
+
+		private boolean isLogin(ServerHttpRequest request) {
+			return request.getMethod().equals(HttpMethod.POST) && "/login"
+					.equals(request.getPath().pathWithinApplication().value());
+		}
+
+		public Mono<Void> redirect(ServerHttpResponse response) {
+			return Mono.defer(() -> {
+				response.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+				response.getHeaders().setLocation(URI.create("/login?error"));
+				return response.setComplete();
+			});
+		}
+
+		private String login(boolean error) {
+			return "<!DOCTYPE html>\n" + "<html lang=\"en\">\n" + "<head>\n"
+					+ "\t<meta charset=\"utf-8\">\n"
+					+ "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n"
+					+ "\t<meta name=\"description\" content=\"\">\n"
+					+ "\t<meta name=\"author\" content=\"\">\n"
+					+ "\t<title>Please Log In</title>\n" + "</head>\n" + "<body>\n" + "<div class=\"container\">\n"
+					+ "\t<form class=\"form-signin\" method=\"post\" action=\"/login\">\n"
+					+ "\t\t<h2 class=\"form-signin-heading\">Please Log In</h2>\n"
+					+ error(error)
+					+ "\t\t\t<label for=\"username\" class=\"sr-only\">Username</label>\n"
+					+ "\t\t\t<input type=\"text\" id=\"username\" name=\"username\" class=\"form-control\" placeholder=\"Username\" required autofocus>\n"
+					+ "\t\t</p>\n" + "\t\t<p>\n"
+					+ "\t\t\t<label for=\"password\" class=\"sr-only\">Password</label>\n"
+					+ "\t\t\t<input type=\"password\" id=\"password\" name=\"password\" class=\"form-control\" placeholder=\"Password\" required>\n"
+					+ "\t\t</p>\n"
+					+ "\t\t<button class=\"btn btn-lg btn-primary btn-block\" type=\"submit\">Sign in</button>\n"
+					+ "\t</form>\n" + "</div>\n" + "</body>\n" + "</html>";
+		}
+
+		private String error(boolean error) {
+			if (error) {
+				return "\t\t<div class=\"alert alert-danger\" role=\"alert\">Invalid\n" + "\t\t\tusername and password.</div>\n";
+			}
+			return "";
+		}
 	}
 }
