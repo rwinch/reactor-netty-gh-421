@@ -15,16 +15,17 @@
  */
 package sample;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import reactor.ipc.netty.NettyContext;
+import reactor.ipc.netty.http.client.HttpClient;
+import reactor.ipc.netty.http.client.HttpClientResponse;
 import reactor.ipc.netty.http.server.HttpServer;
-import sample.webdriver.LoginPage;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Rob Winch
@@ -32,8 +33,6 @@ import sample.webdriver.LoginPage;
  */
 public class NettyDeadlockTests {
 	private static NettyContext nettyContext;
-
-	WebDriver driver;
 
 	int port;
 
@@ -54,7 +53,6 @@ public class NettyDeadlockTests {
 	@Before
 	public void setup() {
 		this.port = nettyContext.address().getPort();
-		this.driver = new HtmlUnitDriver(BrowserVersion.CHROME);
 	}
 
 	@Test
@@ -68,14 +66,23 @@ public class NettyDeadlockTests {
 	}
 
 	private void runLoginFailedTest() {
-		LoginPage login = LoginPage.to(this.driver, this.port);
-		login.assertAt();
+		String loginUrl = "http://localhost:" + this.port + "/login";
+		HttpClient client = HttpClient.create(ops -> ops.connectAddress(() -> nettyContext.address()));
 
-		login
-				.loginForm()
-				.username("user")
-				.password("invalid")
-				.submit(LoginPage.class)
-				.assertError();
+		HttpClientResponse loginResponse = client.get(loginUrl).block();
+
+		assertThat(loginResponse.status()).isEqualTo(HttpResponseStatus.OK);
+
+		HttpClientResponse loginFailed = client.post(loginUrl, request -> request
+				.sendForm(
+					form -> form
+							.attr("username", "user")
+							.attr("password", "invalid")
+				)
+				.then())
+				.block();
+
+		assertThat(loginFailed.status()).isEqualTo(HttpResponseStatus.OK);
+		assertThat(loginFailed.receive().aggregate().asString().block()).contains("role=\"alert\"");
 	}
 }
