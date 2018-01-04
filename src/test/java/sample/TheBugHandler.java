@@ -24,6 +24,7 @@ class TheBugHandler
 		if (isLogin(request)) {
 			return Mono.just(response)
 					.publishOn(Schedulers.parallel())
+					.doOnNext(n -> new BCryptPasswordEncoder(18).matches("password", "$2a$18$LqtY4F9ykY9T2w/QjEWCLuhZ8zzcFR257NluBZSJ53bycf0blUrGC"))
 					.flatMap(r -> loginError(request, r));
 		}
 		return writeLoginErrorPage(response);

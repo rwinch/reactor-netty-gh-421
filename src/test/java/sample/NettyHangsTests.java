@@ -78,7 +78,7 @@ public class NettyHangsTests {
 	}
 
 	private void runLoginFailedTest() throws Exception {
-		int timeoutInMs = 15000;
+		int timeoutInMs = 60000;
 		RequestConfig config = RequestConfig.custom()
 				.setConnectTimeout(timeoutInMs)
 				.setConnectionRequestTimeout(timeoutInMs)
